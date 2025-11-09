@@ -9,7 +9,12 @@ Route::get('/', function () {
     return view('layout/home');
 });
 
-;Route::get('/admin', function () {
+;
+Route::get('/admin', function () {
     return view('admin/admin');
 });
+Route::get('/admin/products', function () {
+    return view('admin/products');
+});
+
 
