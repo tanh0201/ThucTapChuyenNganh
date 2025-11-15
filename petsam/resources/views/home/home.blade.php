@@ -1,231 +1,15 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layout.app')
 
-<head>
-    <meta charset="utf-8">
-    <title>PetSam - Cửa hàng phụ kiện thú cưng (AI Recommendation)</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta name="keywords" content="PetSam, phụ kiện thú cưng, pet, dog, cat, hamster, aquarium, AI recommendation">
-    <meta name="description" content="PetSam - Cửa hàng phụ kiện thú cưng, gợi ý sản phẩm thông minh bằng AI.">
+@section('title', 'PetSam - Cửa hàng phụ kiện thú cưng')
+@section('description', 'PetSam - Cửa hàng phụ kiện thú cưng, gợi ý sản phẩm thông minh bằng AI.')
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-
-    <style>
-      /* Quick small overrides to adapt to PetSam branding (optional) */
-      .bg-primary { background-color: #1aa173 !important; } /* pet green */
-      .text-primary { color: #1aa173 !important; }
-      .btn-primary { background-color: #1aa173 !important; border-color: #178d60 !important; }
-      .product-new, .product-sale { background: #f9b233; color: #fff; }
-    </style>
-</head>
-
-<body>
-
-    <!-- Spinner Start -->
-    <div id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-    <!-- Spinner End -->
-
-
-    <!-- Topbar Start -->
-    <div class="container-fluid px-5 d-none border-bottom d-lg-block">
-        <div class="row gx-0 align-items-center">
-            <div class="col-lg-4 text-center text-lg-start mb-lg-0">
-                <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <a href="#" class="text-muted me-2">Hỗ trợ</a><small> / </small>
-                    <a href="#" class="text-muted mx-2">Chính sách</a><small> / </small>
-                    <a href="#" class="text-muted ms-2">Liên hệ</a>
-                </div>
-            </div>
-            <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
-                <small class="text-dark">Gọi ngay:</small>
-                <a href="tel:+84987654321" class="text-muted ms-2">(+84) 987 654 321</a>
-            </div>
-
-            <div class="col-lg-4 text-center text-lg-end">
-                <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle text-muted me-2" data-bs-toggle="dropdown"><small>VNĐ</small></a>
-                        <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item">VNĐ</a>
-                            <a href="#" class="dropdown-item">USD</a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle text-muted mx-2" data-bs-toggle="dropdown"><small>Tiếng Việt</small></a>
-                        <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item">Tiếng Việt</a>
-                            <a href="#" class="dropdown-item">English</a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
-                                    class="fa fa-user me-2"></i> Tài khoản</small></a>
-                        <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item">Đăng nhập</a>
-                            <a href="#" class="dropdown-item">Đăng ký</a>
-                            <a href="#" class="dropdown-item">Yêu thích</a>
-                            <a href="#" class="dropdown-item">Giỏ hàng</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header Start -->
-    <div class="container-fluid px-5 py-4 d-none d-lg-block">
-        <div class="row gx-0 align-items-center text-center">
-            <div class="col-md-4 col-lg-3 text-center text-lg-start">
-                <div class="d-inline-flex align-items-center">
-                    <a href="#" class="navbar-brand p-0">
-                        <h1 class="display-5 text-primary m-0"><i class="fas fa-paw text-secondary me-2"></i>PetSam</h1>
-                        <!-- <img src="img/logo.png" alt="PetSam"> -->
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-4 col-lg-6 text-center">
-                <div class="position-relative ps-4">
-                    <div class="d-flex border rounded-pill">
-                        <input class="form-control border-0 rounded-pill w-100 py-3" type="text" placeholder="Tìm phụ kiện cho thú cưng...">
-                        <select class="form-select text-dark border-0 border-start rounded-0 p-3" style="width: 200px;">
-                            <option value="All Category">Tất cả</option>
-                            <option value="Dog">Chó</option>
-                            <option value="Cat">Mèo</option>
-                            <option value="Bird">Chim</option>
-                            <option value="Hamster">Hamster</option>
-                            <option value="Aquarium">Thủy sinh</option>
-                        </select>
-                        <button type="button" class="btn btn-primary rounded-pill py-3 px-5"><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-lg-3 text-center text-lg-end">
-                <div class="d-inline-flex align-items-center">
-                    <a href="#" class="text-muted me-3"><i class="fas fa-random"></i></a>
-                    <a href="#" class="text-muted me-3"><i class="fas fa-heart"></i></a>
-                    <a href="#" class="text-muted"><i class="fas fa-shopping-cart"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Header End -->
-
-    <!-- Navbar & Hero Start -->
-    <div class="container-fluid nav-bar p-0">
-        <div class="row gx-0 bg-primary px-5 align-items-center">
-            <div class="col-lg-3 d-none d-lg-block">
-                <nav class="navbar navbar-light position-relative" style="width: 250px;">
-                    <button class="navbar-toggler border-0 fs-4 w-100 px-0 text-start" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#allCat">
-                        <h4 class="m-0"><i class="fa fa-bars me-2"></i>Danh mục</h4>
-                    </button>
-                    <div class="collapse navbar-collapse rounded-bottom" id="allCat">
-                        <div class="navbar-nav ms-auto py-0">
-                            <ul class="list-unstyled categories-bars">
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Phụ kiện cho chó</a>
-                                        <span>(18)</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Phụ kiện cho mèo</a>
-                                        <span>(12)</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Đồ chơi</a>
-                                        <span>(20)</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Thức ăn & Dinh dưỡng</a>
-                                        <span>(14)</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Chuồng & Nhà</a>
-                                        <span>(6)</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Phụ kiện thủy sinh</a>
-                                        <span>(8)</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-            <div class="col-12 col-lg-9">
-                <nav class="navbar navbar-expand-lg navbar-light bg-primary ">
-                    <a href="" class="navbar-brand d-block d-lg-none">
-                        <h1 class="display-5 text-secondary m-0"><i class="fas fa-paw text-white me-2"></i>PetSam</h1>
-                    </a>
-                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars fa-1x"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <div class="navbar-nav ms-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="shop.html" class="nav-item nav-link">Sản phẩm</a>
-                            <a href="single.html" class="nav-item nav-link">Chi tiết</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang khác</a>
-                                <div class="dropdown-menu m-0">
-                                    <a href="bestseller.html" class="dropdown-item">Bán chạy</a>
-                                    <a href="cart.html" class="dropdown-item">Giỏ hàng</a>
-                                    <a href="cheackout.html" class="dropdown-item">Thanh toán</a>
-                                    <a href="404.html" class="dropdown-item">404</a>
-                                </div>
-                            </div>
-                            <a href="contact.html" class="nav-item nav-link me-2">Liên hệ</a>
-                        </div>
-                        <a href="#" class="btn btn-secondary rounded-pill py-2 px-4 mb-3 mb-md-3 mb-lg-0"><i
-                                class="fa fa-phone-alt me-2"></i> +84 987 654 321</a>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    </div>
-    <!-- Navbar & Hero End -->
+@section('content')
 
     <!-- Carousel Start -->
     <div class="container-fluid carousel bg-light px-0">
         <div class="row g-0 justify-content-end">
             <div class="col-12 col-lg-7 col-xl-9">
-                <div class="header-carousel owl-carousel bg-light py-5">
+                <div class="header-carousel owl-carousel bg-light py-0">
                     <div class="row g-0 header-carousel-item align-items-center">
                         <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
                             <img src="img/pets-banner-1.jpg" class="img-fluid w-100" alt="PetSam promo">
@@ -257,30 +41,7 @@
                     </div>
                 </div>
             </div>
-           <!-- <div class="col-12 col-lg-5 col-xl-3 wow fadeInRight" data-wow-delay="0.1s">
-                <div class="carousel-header-banner h-100">
-                    <img src="img/header-img.jpg" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="promo">
-                    <div class="carousel-banner-offer">
-                        <p class="bg-primary text-white rounded fs-5 py-2 px-4 mb-0 me-3">Miễn phí giao hàng</p>
-                        <p class="text-primary fs-5 fw-bold mb-0">Đơn hàng > 500.000₫</p>
-                    </div>
-                    <div class="carousel-banner">
-                        <div class="carousel-banner-content text-center p-4">
-                            <a href="#" class="d-block mb-2">Phụ kiện</a>
-                            <a href="#" class="d-block text-white fs-3">Dành cho thú cưng</a>
-                            <del class="me-2 text-white fs-5">₫350.000</del>
-                            <span class="text-primary fs-5">₫299.000</span>
-                        </div>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4"><i
-                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Carousel End -->
 
-    <!-- Services Start -->
     <div class="container-fluid px-0">
         <div class="row g-0">
             <div class="col-6 col-md-4 col-lg-2 border-start border-end wow fadeInUp" data-wow-delay="0.1s">
@@ -785,93 +546,23 @@
         </div>
     </div>
 
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-white footer mt-5 pt-5">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-md-6 col-lg-3">
-                    <h5 class="text-primary mb-4">PetSam</h5>
-                    <p>PetSam - Cung cấp phụ kiện và chăm sóc thú cưng. Tin cậy, nhanh chóng và tận tâm.</p>
-                    <div class="d-flex pt-2">
-                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-instagram"></i></a>
-                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <h5 class="text-primary mb-4">Liên hệ</h5>
-                    <p><i class="fa fa-map-marker-alt me-2"></i> 123 Đường Pet, Quận Thú Cưng, TP.</p>
-                    <p><i class="fa fa-phone-alt me-2"></i> +84 987 654 321</p>
-                    <p><i class="fa fa-envelope me-2"></i> support@petsam.vn</p>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <h5 class="text-primary mb-4">Thông tin</h5>
-                    <a class="btn btn-link" href="#">Về chúng tôi</a>
-                    <a class="btn btn-link" href="#">Chính sách đổi trả</a>
-                    <a class="btn btn-link" href="#">Hướng dẫn mua hàng</a>
-                    <a class="btn btn-link" href="#">FAQ</a>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <h5 class="text-primary mb-4">Đăng ký nhận tin</h5>
-                    <p>Nhập email để nhận mã giảm giá và bản tin chăm sóc thú cưng.</p>
-                    <div class="position-relative mx-auto">
-                        <input class="form-control border-0 rounded-pill w-100 py-3 ps-4 pe-5" placeholder="Email của bạn">
-                        <button type="button" class="btn btn-primary rounded-pill position-absolute top-0 end-0 mt-2 me-2">Đăng ký</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer End -->
+@endsection
 
-    <!-- Copyright Start -->
-    <div class="container-fluid copyright py-4">
-        <div class="container">
-            <div class="row g-4 align-items-center">
-                <div class="col-md-6 text-center text-md-start mb-md-0">
-                    <span class="text-white">© <strong>PetSam</strong>, All right reserved.</span>
-                </div>
-                <div class="col-md-6 text-center text-md-end text-white">
-                    Designed By <a class="border-bottom text-white" href="https://htmlcodex.com">HTML Codex</a>.
-                    Distributed By <a class="border-bottom text-white" href="https://themewagon.com">ThemeWagon</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Copyright End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-
-    <script>
-        // Small init for spinner + wow + owl (giữ tương thích với template gốc)
-        $(window).on('load', function () {
-            $('#spinner').removeClass('show');
-            new WOW().init();
-
-            // init carousel if owl exists
-            if ($('.header-carousel').length) {
-                $('.header-carousel').owlCarousel({
-                    autoplay: true,
-                    smartSpeed: 1000,
-                    items: 1,
-                    dots: true,
-                    loop: true,
-                    nav: false
-                });
-            }
-        });
-    </script>
-</body>
-
-</html>
+@section('additional-js')
+<script>
+    // Init carousel and animations for home page
+    $(window).on('load', function () {
+        // init carousel if owl exists
+        if ($('.header-carousel').length) {
+            $('.header-carousel').owlCarousel({
+                autoplay: true,
+                smartSpeed: 1000,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: false
+            });
+        }
+    });
+</script>
+@endsection

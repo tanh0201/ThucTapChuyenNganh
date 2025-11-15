@@ -1,268 +1,421 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('admin.layout.base')
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>PetSam Admin - Quản lý Sản phẩm</title>
-  <!-- Bootstrap core CSS -->
-  <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-  <!-- Font Awesome (CDN) -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <!-- Page level plugin CSS (DataTables CDN) -->
-  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-  <!-- Custom styles for this template -->
-  <link href="{{ asset('css/sb-admin.css') }}" rel="stylesheet">
-</head>
+@section('title', 'PetSam Admin - Quản Lý Sản Phẩm')
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-  <!-- Navigation-->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="/admin">PetSam</a>
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-          <a class="nav-link" href="/admin">
-            <i class="fa fa-fw fa-tachometer"></i>
-            <span class="nav-link-text">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Sản phẩm">
-          <a class="nav-link" href="/admin/products">
-            <i class="fa fa-fw fa-shopping-bag"></i>
-            <span class="nav-link-text">Sản phẩm</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Đơn hàng">
-          <a class="nav-link" href="/admin/orders">
-            <i class="fa fa-fw fa-shopping-cart"></i>
-            <span class="nav-link-text">Đơn hàng</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Người dùng">
-          <a class="nav-link" href="/admin/users">
-            <i class="fa fa-fw fa-users"></i>
-            <span class="nav-link-text">Người dùng</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Phân quyền">
-          <a class="nav-link" href="/admin/roles">
-            <i class="fa fa-fw fa-user-secret"></i>
-            <span class="nav-link-text">Phân quyền</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Thống kê">
-          <a class="nav-link" href="/admin/stats">
-            <i class="fa fa-fw fa-bar-chart"></i>
-            <span class="nav-link-text">Thống kê</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Gợi ý AI">
-          <a class="nav-link" href="/admin/ai">
-            <i class="fa fa-fw fa-lightbulb-o"></i>
-            <span class="nav-link-text">Gợi ý AI</span>
-          </a>
-        </li>
-      </ul>
-      <ul class="navbar-nav sidenav-toggler">
-        <li class="nav-item">
-          <a class="nav-link text-center" id="sidenavToggler">
-            <i class="fa fa-fw fa-angle-left"></i>
-          </a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <form class="form-inline my-2 my-lg-0 mr-lg-2">
-            <div class="input-group">
-              <input class="form-control" type="text" placeholder="Tìm kiếm...">
-              <span class="input-group-btn">
-                <button class="btn btn-primary" type="button">
-                  <i class="fa fa-search"></i>
-                </button>
-              </span>
-            </div>
-          </form>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i>Đăng xuất</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+@section('breadcrumb')
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="/admin">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active">Sản Phẩm</li>
+</ol>
+@endsection
 
-  <div class="content-wrapper">
-    <div class="container-fluid">
-      <!-- Breadcrumbs-->
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/admin">Dashboard</a>
-        </li>
-        <li class="breadcrumb-item active">Quản lý Sản phẩm</li>
-      </ol>
+@section('content')
 
-      <!-- Product Management Tools -->
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-shopping-bag"></i> Quản lý Sản phẩm
-          <a href="/admin/products/create" class="btn btn-primary float-right">
-            <i class="fa fa-plus"></i> Thêm sản phẩm mới
-          </a>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-bordered" id="productsTable" width="100%" cellspacing="0">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Ảnh</th>
-                  <th>Tên sản phẩm</th>
-                  <th>Danh mục</th>
-                  <th>Giá</th>
-                  <th>Số lượng</th>
-                  <th>Trạng thái</th>
-                  <th>Hành động</th>
-                </tr>
-              </thead>
-              <tbody>
-                @if(!empty($products))
-                  @foreach($products as $product)
-                    <tr>
-                      <td>{{ $product->id }}</td>
-                      <td>
-                        <img src="{{ $product->image_url ?? asset('img/no-image.png') }}" alt="{{ $product->name }}" style="height: 50px;">
-                      </td>
-                      <td>{{ $product->name }}</td>
-                      <td>{{ $product->category->name ?? 'N/A' }}</td>
-                      <td>{{ number_format($product->price) }}₫</td>
-                      <td>{{ $product->stock }}</td>
-                      <td>
-                        @if($product->status == 1)
-                          <span class="badge badge-success">Còn hàng</span>
-                        @else
-                          <span class="badge badge-danger">Hết hàng</span>
-                        @endif
-                      </td>
-                      <td>
-                        <a href="/admin/products/{{ $product->id }}/edit" class="btn btn-primary btn-sm">
-                          <i class="fa fa-pencil"></i>
-                        </a>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ $product->id }}">
-                          <i class="fa fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  @endforeach
-                @endif
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product Statistics -->
-      <div class="row">
-        <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-primary o-hidden h-100">
-            <div class="card-body">
-              <div class="card-body-icon">
-                <i class="fa fa-fw fa-cube"></i>
-              </div>
-              <div class="mr-5">Tổng sản phẩm: {{ $stats['total'] ?? 0 }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-success o-hidden h-100">
-            <div class="card-body">
-              <div class="card-body-icon">
-                <i class="fa fa-fw fa-check-circle"></i>
-              </div>
-              <div class="mr-5">Còn hàng: {{ $stats['in_stock'] ?? 0 }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-danger o-hidden h-100">
-            <div class="card-body">
-              <div class="card-body-icon">
-                <i class="fa fa-fw fa-exclamation-circle"></i>
-              </div>
-              <div class="mr-5">Hết hàng: {{ $stats['out_of_stock'] ?? 0 }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-warning o-hidden h-100">
-            <div class="card-body">
-              <div class="card-body-icon">
-                <i class="fa fa-fw fa-tags"></i>
-              </div>
-              <div class="mr-5">Sắp hết hàng: {{ $stats['low_stock'] ?? 0 }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <!-- /.container-fluid-->
-
-    <!-- Footer -->
-    <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Copyright © PetSam 2025</small>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fa fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Bạn muốn đăng xuất?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">Chọn "Đăng xuất" để kết thúc phiên hiện tại.</div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-            <a class="btn btn-primary" href="/logout">Đăng xuất</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core plugin JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <!-- Page level plugin JavaScript -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-    <!-- Custom scripts -->
-    <script src="{{ asset('js/sb-admin.min.js') }}"></script>
-    <script src="{{ asset('js/sb-admin-datatables.min.js') }}"></script>
-    <script>
-      $(document).ready(function() {
-        $('#productsTable').DataTable();
-      });
-    </script>
+<div class="row mb-4">
+  <div class="col-md-8">
+    <h2 class="h3 mb-0">
+      <i class="fa fa-shopping-bag"></i> Quản Lý Sản Phẩm
+    </h2>
   </div>
-</body>
-</html>
+  <div class="col-md-4 text-right">
+    <button class="btn btn-primary" onclick="showAddForm()">
+      <i class="fa fa-plus"></i> Thêm Sản Phẩm
+    </button>
+  </div>
+</div>
+
+
+@if ($errors->any())
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Có lỗi xảy ra!</strong>
+    <ul class="mb-0">
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+    <button type="button" class="close" data-dismiss="alert">
+      <span>&times;</span>
+    </button>
+  </div>
+@endif
+
+@if (session('success'))
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="close" data-dismiss="alert">
+      <span>&times;</span>
+    </button>
+  </div>
+@endif
+
+
+<div id="formContainer" class="card shadow mb-4" style="display: none; background-color: #ffffff; z-index: 10;">
+  <div class="card-header py-3" style="background-color: #4e73df; color: white;">
+    <h6 class="m-0 font-weight-bold" id="formTitle" style="color: white;">
+      <i class="fa fa-plus"></i> Thêm Sản Phẩm Mới
+    </h6>
+  </div>
+  <div class="card-body" style="background-color: #ffffff;">
+    <form id="productForm" method="POST" enctype="multipart/form-data">
+      @csrf
+      <input type="hidden" id="productId" name="product_id">
+      <input type="hidden" id="formMethod" name="_method" value="POST">
+        <div class="col-md-6 mb-3">
+          <label for="name" class="form-label" style="color: #333333;">
+            <strong>Tên Sản Phẩm <span class="text-danger">*</span></strong>
+          </label>
+          <input type="text" 
+                 class="form-control @error('name') is-invalid @enderror" 
+                 id="name" 
+                 name="name" 
+                 placeholder="Nhập tên sản phẩm"
+                 style="color: #333333; background-color: #ffffff; border: 1px solid #ddd;"
+                 required>
+          @error('name')
+            <div class="invalid-feedback d-block" style="color: #dc3545;">{{ $message }}</div>
+          @enderror
+        </div>
+
+
+        <div class="col-md-6 mb-3">
+          <label for="category_id" class="form-label" style="color: #333333;">
+            <strong>Danh Mục <span class="text-danger">*</span></strong>
+          </label>
+          <select class="form-control @error('category_id') is-invalid @enderror" 
+                  id="category_id" 
+                  name="category_id" 
+                  style="color: #333333; background-color: #ffffff; border: 1px solid #ddd;"
+                  required>
+            <option value="">-- Chọn danh mục --</option>
+            @foreach($categories as $category)
+              <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @endforeach
+          </select>
+          @error('category_id')
+            <div class="invalid-feedback d-block" style="color: #dc3545;">{{ $message }}</div>
+          @enderror
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="price" class="form-label" style="color: #333333;">
+            <strong>Giá (₫) <span class="text-danger">*</span></strong>
+          </label>
+          <input type="number" 
+                 class="form-control @error('price') is-invalid @enderror" 
+                 id="price" 
+                 name="price" 
+                 placeholder="0"
+                 style="color: #333333; background-color: #ffffff; border: 1px solid #ddd;"
+                 min="0"
+                 required>
+          @error('price')
+            <div class="invalid-feedback d-block" style="color: #dc3545;">{{ $message }}</div>
+          @enderror
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="stock" class="form-label" style="color: #333333;">
+            <strong>Số Lượng <span class="text-danger">*</span></strong>
+          </label>
+          <input type="number" 
+                 class="form-control @error('stock') is-invalid @enderror" 
+                 id="stock" 
+                 name="stock" 
+                 placeholder="0"
+                 style="color: #333333; background-color: #ffffff; border: 1px solid #ddd;"
+                 min="0"
+                 required>
+          @error('stock')
+            <div class="invalid-feedback d-block" style="color: #dc3545;">{{ $message }}</div>
+          @enderror
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="status" class="form-label" style="color: #333333;">
+            <strong>Trạng Thái <span class="text-danger">*</span></strong>
+          </label>
+          <select class="form-control @error('status') is-invalid @enderror" 
+                  id="status" 
+                  name="status" 
+                  style="color: #333333; background-color: #ffffff; border: 1px solid #ddd;"
+                  required>
+            <option value="active">Hoạt Động</option>
+            <option value="inactive">Không Hoạt Động</option>
+          </select>
+          @error('status')
+            <div class="invalid-feedback d-block" style="color: #dc3545;">{{ $message }}</div>
+          @enderror
+        </div>
+      </div>
+
+      
+      <div class="mb-3">
+        <label for="description" class="form-label" style="color: #333333;">
+          <strong>Mô Tả</strong>
+        </label>
+        <textarea class="form-control @error('description') is-invalid @enderror" 
+                  id="description" 
+                  name="description" 
+                  rows="3" 
+                  placeholder="Nhập mô tả sản phẩm"
+                  style="color: #333333; background-color: #ffffff; border: 1px solid #ddd;"></textarea>
+        @error('description')
+          <div class="invalid-feedback d-block" style="color: #dc3545;">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label" style="color: #333333;">
+          <strong>Ảnh Sản Phẩm</strong>
+        </label>
+        <input type="file" 
+               class="form-control @error('image') is-invalid @enderror" 
+               id="image" 
+               name="image" 
+               accept="image/*"
+               style="color: #333333; background-color: #ffffff; border: 1px solid #ddd;">
+        <small class="form-text" style="color: #666666;">Định dạng: JPEG, PNG, JPG, GIF</small>
+        <div id="imagePreview" class="mt-2"></div>
+        @error('image')
+          <div class="invalid-feedback d-block" style="color: #dc3545;">{{ $message }}</div>
+        @enderror
+      </div>
+      <div class="form-group mt-4">
+        <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+          <i class="fa fa-save"></i> Lưu Sản Phẩm
+        </button>
+        <button type="button" class="btn btn-secondary btn-lg" onclick="hideForm()">
+          <i class="fa fa-times"></i> Hủy
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="card shadow mb-4">
+  <div class="card-header py-3" style="background-color: #f8f9fa;">
+    <h6 class="m-0 font-weight-bold text-primary">
+      <i class="fa fa-list"></i> Danh Sách Sản Phẩm
+    </h6>
+  </div>
+  <div class="card-body" style="background-color: #ffffff; padding: 0;">
+    @if($products->count() > 0)
+      <div class="table-responsive">
+        <table class="table table-hover mb-0" id="productsTable" style="background-color: #ffffff;">
+          <thead style="background-color: #4e73df; border-bottom: 2px solid #dee2e6;">
+            <tr>
+              <th style="padding: 1rem; color: #ffffff;"><strong>STT</strong></th>
+              <th style="padding: 1rem; color: #ffffff;"><strong>Ảnh</strong></th>
+              <th style="padding: 1rem; color: #ffffff;"><strong>Tên Sản Phẩm</strong></th>
+              <th style="padding: 1rem; color: #ffffff;"><strong>Danh Mục</strong></th>
+              <th style="padding: 1rem; color: #ffffff;"><strong>Giá</strong></th>
+              <th style="padding: 1rem; color: #ffffff;"><strong>Số Lượng</strong></th>
+              <th style="padding: 1rem; color: #ffffff;"><strong>Trạng Thái</strong></th>
+              <th style="padding: 1rem; color: #ffffff;"><strong>Hành Động</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($products as $product)
+              <tr id="product-row-{{ $product->id }}" style="border-bottom: 1px solid #dee2e6; background-color: #ffffff;">
+                <td style="padding: 1rem; color: #333333;">
+                  <strong>{{ $loop->iteration }}</strong>
+                </td>
+                <td style="padding: 1rem; color: #333333;">
+                  @if(!empty($product->image) && file_exists(public_path('storage/' . $product->image)))
+                    <img src="{{ asset('storage/' . $product->image) }}" 
+                         alt="{{ $product->name }}" 
+                         style="height:45px; width: 45px; object-fit: cover; border-radius: 4px;">
+                  @else
+                    <span class="badge badge-secondary" style="background-color: #858796; color: white; font-size: 12px; padding: 6px 10px;">Ảnh</span>
+                  @endif
+                </td>
+                <td style="padding: 1rem; color: #333333;">
+                  <strong class="d-block">{{ $product->name }}</strong>
+                </td>
+                <td style="padding: 1rem; color: #333333;">
+                  <span class="badge badge-primary" style="background-color: #4e73df; color: white; font-size: 12px; padding: 6px 10px;">{{ $product->category->name }}</span>
+                </td>
+                <td style="padding: 1rem; color: #333333;">
+                  <strong style="color: #f6c23e; font-size: 14px;">{{ number_format($product->price, 0, ',', '.') }}₫</strong>
+                </td>
+                <td style="padding: 1rem; color: #333333;">
+                  <span class="badge badge-pill" style="background-color: {{ $product->stock > 10 ? '#1cc88a' : ($product->stock > 0 ? '#ffc107' : '#e74c3c') }}; color: #fff; font-size: 12px; padding: 6px 10px;">
+                    {{ $product->stock }}
+                  </span>
+                </td>
+                <td style="padding: 1rem; color: #333333;">
+                  @if($product->status === 'active')
+                    <span class="badge badge-success" style="background-color: #1cc88a; color: white; font-size: 12px; padding: 6px 10px;">Hoạt Động</span>
+                  @else
+                    <span class="badge badge-secondary" style="background-color: #e74c3c; color: white; font-size: 12px; padding: 6px 10px;">Không Hoạt Động</span>
+                  @endif
+                </td>
+                <td style="padding: 1rem;">
+                  <div class="btn-group btn-group-sm" role="group">
+                    <button class="btn btn-primary edit-btn" 
+                            data-id="{{ $product->id }}"
+                            data-name="{{ $product->name }}" 
+                            data-category-id="{{ $product->category_id }}" 
+                            data-price="{{ $product->price }}" 
+                            data-stock="{{ $product->stock }}" 
+                            data-status="{{ $product->status }}" 
+                            data-description="{{ $product->description ?? '' }}" 
+                            data-image="{{ $product->image ?? '' }}"
+                            title="Sửa">
+                      <i class="fa fa-edit"></i> Sửa
+                    </button>
+                    <button class="btn btn-danger delete-btn" 
+                            data-id="{{ $product->id }}"
+                            title="Xóa">
+                      <i class="fa fa-trash"></i> Xóa
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="d-flex justify-content-center p-3" style="background-color: #f8f9fa;">
+        {{ $products->links() }}
+      </div>
+    @else
+      <div class="text-center py-5" style="background-color: #ffffff;">
+        <i class="fa fa-inbox fa-3x mb-3" style="color: #bbb;"></i>
+        <p style="color: #666666; font-size: 16px;">Chưa có sản phẩm nào. <a href="#" onclick="showAddForm()" class="font-weight-bold" style="color: #4e73df;">Thêm sản phẩm mới</a></p>
+      </div>
+    @endif
+  </div>
+</div>
+
+@endsection
+
+@section('additional-js')
+<script>
+// Get all categories (for form)
+const categoriesData = {!! json_encode($categories) !!};
+
+// Show Add Form
+function showAddForm() {
+  resetForm();
+  document.getElementById('formContainer').style.display = 'block';
+  document.getElementById('formTitle').innerHTML = '<i class="fa fa-plus"></i> Thêm Sản Phẩm Mới';
+  document.getElementById('submitBtn').innerHTML = '<i class="fa fa-save"></i> Tạo Sản Phẩm';
+  document.getElementById('productForm').action = '/admin/products';
+  document.getElementById('formMethod').value = 'POST';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Hide Form
+function hideForm() {
+  document.getElementById('formContainer').style.display = 'none';
+  resetForm();
+}
+
+// Reset Form
+function resetForm() {
+  document.getElementById('productForm').reset();
+  document.getElementById('productId').value = '';
+  document.getElementById('imagePreview').innerHTML = '';
+}
+
+// Edit Product - Data passed from server via data attributes
+function editProduct(id, name, categoryId, price, stock, status, description, image) {
+  // Populate form
+  document.getElementById('name').value = name;
+  document.getElementById('category_id').value = categoryId;
+  document.getElementById('price').value = price;
+  document.getElementById('stock').value = stock;
+  document.getElementById('status').value = status;
+  document.getElementById('description').value = description;
+  document.getElementById('productId').value = id;
+
+  // Show image preview
+  if (image && image.trim()) {
+    const imagePreview = document.getElementById('imagePreview');
+    imagePreview.innerHTML = `
+      <div class="position-relative d-inline-block">
+        <img src="/storage/${image}" alt="Preview" style="max-width: 150px; border-radius: 4px;">
+        <small class="d-block text-muted mt-1">Chọn ảnh mới để thay thế</small>
+      </div>
+    `;
+  }
+
+  // Update form
+  document.getElementById('formContainer').style.display = 'block';
+  document.getElementById('formTitle').innerHTML = '<i class="fa fa-edit"></i> Sửa Sản Phẩm: ' + name;
+  document.getElementById('submitBtn').innerHTML = '<i class="fa fa-save"></i> Cập Nhật Sản Phẩm';
+  document.getElementById('productForm').action = `/admin/products/${id}`;
+  document.getElementById('formMethod').value = 'PATCH';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Delete Product
+function deleteProduct(id) {
+  if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+    // Create and submit form
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/admin/products/${id}`;
+    form.style.display = 'none';
+    
+    // Add CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    form.innerHTML = `
+      <input type="hidden" name="_token" value="${csrfToken}">
+      <input type="hidden" name="_method" value="DELETE">
+    `;
+    
+    document.body.appendChild(form);
+    form.submit();
+  }
+}
+
+// Image Preview
+document.getElementById('image').addEventListener('change', function(e) {
+  if (this.files && this.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('imagePreview').innerHTML = `
+        <img src="${e.target.result}" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 4px;">
+      `;
+    };
+    reader.readAsDataURL(this.files[0]);
+  }
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  // Event listeners for edit buttons
+  document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const data = {
+        id: this.getAttribute('data-id'),
+        name: this.getAttribute('data-name'),
+        categoryId: this.getAttribute('data-category-id'),
+        price: this.getAttribute('data-price'),
+        stock: this.getAttribute('data-stock'),
+        status: this.getAttribute('data-status'),
+        description: this.getAttribute('data-description'),
+        image: this.getAttribute('data-image')
+      };
+      editProduct(data.id, data.name, data.categoryId, data.price, data.stock, data.status, data.description, data.image);
+    });
+  });
+
+  // Event listeners for delete buttons
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const id = this.getAttribute('data-id');
+      deleteProduct(id);
+    });
+  });
+});
+</script>
+@endsection
