@@ -15,15 +15,19 @@ use App\Http\Controllers\Admin\NotificationController;
 
 
 Route::get('/', function () {
-    return view('home.home');
+    $products = \App\Models\Product::with('category')->where('status', 'active')->latest()->limit(8)->get();
+    $categories = \App\Models\Category::where('status', 'active')->get();
+    return view('home.home', compact('products', 'categories'));
 });
 
 Route::get('/shop', function () {
-    return view('home.shop');
+    $products = \App\Models\Product::with('category')->where('status', 'active')->paginate(12);
+    $categories = \App\Models\Category::where('status', 'active')->get();
+    return view('home.shop', compact('products', 'categories'));
 });
 
 
-Route::prefix('/admin')->group(function () {
+Route::prefix('/admin')->middleware(['auth', 'is_admin'])->group(function () {
     
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/stats', [StatsController::class, 'index'])->name('admin.stats.index');
@@ -125,3 +129,12 @@ Route::prefix('/admin')->group(function () {
 
 
 
+
+Auth::routes();
+
+// GET /logout redirect to home to prevent direct link access
+Route::get('/logout', function () {
+    return redirect('/');
+});
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -75,6 +75,39 @@
                             </div>
                         </div>
                         <a href="/contact" class="nav-item nav-link me-2">Liên hệ</a>
+                        
+                        @auth
+                            @if(is_admin())
+                                <a href="{{ route('admin.dashboard') }}" class="nav-item nav-link">
+                                    <i class="fa fa-tachometer-alt"></i> Admin
+                                </a>
+                            @endif
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fa fa-user-circle"></i> {{ Auth::user()->name }}
+                                </a>
+                                <div class="dropdown-menu m-0">
+                                    <a href="/home" class="dropdown-item">
+                                        <i class="fa fa-tachometer-alt"></i> Tài khoản
+                                    </a>
+                                    @if(is_admin())
+                                        <a href="{{ route('admin.dashboard') }}" class="dropdown-item">
+                                            <i class="fa fa-cog"></i> Admin Panel
+                                        </a>
+                                    @endif
+                                    <hr class="dropdown-divider m-1">
+                                    <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fa fa-sign-out"></i> Đăng xuất
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ route('login') }}" class="nav-item nav-link">Đăng nhập</a>
+                            <a href="{{ route('register') }}" class="nav-item nav-link">Đăng ký</a>
+                        @endauth
                     </div>
                     <a href="tel:+84987654321" class="btn btn-secondary rounded-pill py-2 px-4 mb-3 mb-md-3 mb-lg-0"><i
                             class="fa fa-phone-alt me-2"></i> +84 987 654 321</a>
