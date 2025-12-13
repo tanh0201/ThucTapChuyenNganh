@@ -49,12 +49,12 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         // Check user role and redirect accordingly
-        if ($user->role && in_array($user->role->name, ['Admin', 'Editor'])) {
-            // Admin user
+        if ($user->role === 'admin') {
+            // Admin user - redirect to admin dashboard
             return redirect()->route('admin.dashboard');
         }
         
-        // Regular user
+        // Regular user - redirect to home
         return redirect('/');
     }
 }

@@ -14,7 +14,7 @@ function is_admin()
     }
 
     $user = Auth::user();
-    return $user->role && in_array($user->role->name, ['Admin', 'Editor']);
+    return $user->role === 'admin';
 }
 
 /**
@@ -30,7 +30,7 @@ function user_has_role($role)
     }
 
     $user = Auth::user();
-    return $user->role && $user->role->name === $role;
+    return $user->role === $role;
 }
 
 /**
@@ -47,8 +47,8 @@ function user_has_permission($permission)
 
     $user = Auth::user();
 
-    // Check role permissions
-    if ($user->role && $user->role->permissions()->where('name', $permission)->exists()) {
+    // Only admin has all permissions
+    if ($user->role === 'admin') {
         return true;
     }
 

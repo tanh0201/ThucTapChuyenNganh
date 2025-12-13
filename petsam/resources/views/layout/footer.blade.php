@@ -1,58 +1,72 @@
 <!-- Footer Start -->
-<div class="container-fluid bg-dark text-white footer mt-5 pt-5">
-    <div class="container py-5">
-        <div class="row g-5">
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container-fluid px-4">
+        <div class="row g-4">
             <div class="col-md-6 col-lg-3">
-                <h5 class="text-primary mb-4">PetSam</h5>
-                <p>PetSam - Cung cấp phụ kiện và chăm sóc thú cưng. Tin cậy, nhanh chóng và tận tâm.</p>
-                <div class="d-flex pt-2">
-                    <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-instagram"></i></a>
-                    <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
+                <h5 class="text-primary mb-3">
+                    <i class="fas fa-paw me-2"></i>PetSam
+                </h5>
+                <p class="text-muted small">Cung cấp phụ kiện và sản phẩm chăm sóc thú cưng chất lượng cao. Giao hàng nhanh toàn quốc.</p>
             </div>
             <div class="col-md-6 col-lg-3">
-                <h5 class="text-primary mb-4">Liên hệ</h5>
-                <p><i class="fa fa-map-marker-alt me-2"></i> 123 Đường Pet, Quận Thú Cưng, TP.</p>
-                <p><i class="fa fa-phone-alt me-2"></i> +84 987 654 321</p>
-                <p><i class="fa fa-envelope me-2"></i> support@petsam.vn</p>
+                <h5 class="text-primary mb-3">Liên hệ</h5>
+                <p class="text-muted small mb-1">
+                    <i class="fas fa-map-marker-alt me-2"></i>123 Đường Pet, TP. HCM
+                </p>
+                <p class="text-muted small mb-1">
+                    <i class="fas fa-phone-alt me-2"></i><a href="tel:+84987654321" class="text-decoration-none text-muted">(+84) 987 654 321</a>
+                </p>
+                <p class="text-muted small">
+                    <i class="fas fa-envelope me-2"></i><a href="mailto:support@petsam.vn" class="text-decoration-none text-muted">support@petsam.vn</a>
+                </p>
             </div>
             <div class="col-md-6 col-lg-3">
-                <h5 class="text-primary mb-4">Thông tin</h5>
-                <a class="btn btn-link" href="#">Về chúng tôi</a>
-                <a class="btn btn-link" href="#">Chính sách đổi trả</a>
-                <a class="btn btn-link" href="#">Hướng dẫn mua hàng</a>
-                <a class="btn btn-link" href="#">FAQ</a>
+                <h5 class="text-primary mb-3">Thông tin</h5>
+                <ul class="list-unstyled text-muted small">
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Về chúng tôi</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Chính sách đổi trả</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#" class="text-decoration-none text-muted">FAQ</a></li>
+                </ul>
             </div>
             <div class="col-md-6 col-lg-3">
-                <h5 class="text-primary mb-4">Đăng ký nhận tin</h5>
-                <p>Nhập email để nhận mã giảm giá và bản tin chăm sóc thú cưng.</p>
-                <div class="position-relative mx-auto">
-                    <input class="form-control border-0 rounded-pill w-100 py-3 ps-4 pe-5" placeholder="Email của bạn">
-                    <button type="button" class="btn btn-primary rounded-pill position-absolute top-0 end-0 mt-2 me-2">Đăng ký</button>
+                <h5 class="text-primary mb-3">Theo dõi</h5>
+                <div class="d-flex gap-2">
+                    <a href="#" class="btn btn-sm btn-outline-light"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-light"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-light"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-light"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
+        <hr class="bg-secondary my-4">
+        <div class="row">
+            <div class="col-12 text-center text-muted small">
+                <p class="mb-0">&copy; 2025 <strong>PetSam</strong>. All rights reserved.</p>
+            </div>
+        </div>
     </div>
-</div>
+</footer>
 <!-- Footer End -->
 
-<!-- Copyright Start -->
-<div class="container-fluid copyright py-4">
-    <div class="container">
-        <div class="row g-4 align-items-center">
-            <div class="col-md-6 text-center text-md-start mb-md-0">
-                <span class="text-white">© <strong>PetSam</strong>, All right reserved.</span>
-            </div>
-            <div class="col-md-6 text-center text-md-end text-white">
-                Designed By <a class="border-bottom text-white" href="https://htmlcodex.com">HTML Codex</a>.
-                Distributed By <a class="border-bottom text-white" href="https://themewagon.com">ThemeWagon</a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Copyright End -->
+<!-- Back to Top Button -->
+<a href="#" class="btn btn-primary btn-lg-square back-to-top" style="position: fixed; bottom: 1rem; right: 1rem; display: none; z-index: 99;">
+    <i class="fas fa-arrow-up"></i>
+</a>
 
-<!-- Back to Top -->
-<a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+        backToTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+</script>

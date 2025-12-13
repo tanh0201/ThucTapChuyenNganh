@@ -16,8 +16,8 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        // Check if user is authenticated and has admin or editor role
-        if ($request->user() && $request->user()->role && in_array($request->user()->role->name, ['Admin', 'Editor'])) {
+        // Check if user is authenticated and has admin role
+        if ($request->user() && $request->user()->role === 'admin') {
             return $next($request);
         }
 

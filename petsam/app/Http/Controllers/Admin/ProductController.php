@@ -12,11 +12,23 @@ class ProductController extends Controller
     /**
      * Display a listing of products
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')->paginate(15);
+        $query = Product::with('category');
+        
+        // Filter by category if provided
+        if ($request->has('category_id') && $request->category_id) {
+            $query->where('category_id', $request->category_id);
+        }
+        
+        $products = $query->paginate(15);
         $categories = Category::where('status', 'active')->get();
-        return view('admin.products', ['products' => $products, 'categories' => $categories]);
+        
+        return view('admin.products.index', [
+            'products' => $products, 
+            'categories' => $categories,
+            'selectedCategory' => $request->category_id ?? null
+        ]);
     }
 
     /**
@@ -24,7 +36,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create');
+        $categories = Category::where('status', 'active')->get();
+        return view('admin.products.create', ['categories' => $categories]);
     }
 
     /**
@@ -38,9 +51,17 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|integer|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'required|in:active,inactive',
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . \Illuminate\Support\Str::slug($validated['name']) . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('img/products'), $imageName);
+            $validated['image'] = 'img/products/' . $imageName;
+        }
 
         Product::create($validated);
         return redirect('/admin/products')->with('success', 'Sản phẩm được tạo thành công');
@@ -51,7 +72,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('admin.products.show', ['product' => $product]);
+        return redirect('/admin/products');
     }
 
     /**
@@ -59,7 +80,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('admin.products.edit', ['product' => $product]);
+        $categories = Category::where('status', 'active')->get();
+        return view('admin.products.edit', ['product' => $product, 'categories' => $categories]);
     }
 
     /**
@@ -73,12 +95,25 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|integer|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'required|in:active,inactive',
         ]);
 
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+            
+            $image = $request->file('image');
+            $imageName = time() . '_' . \Illuminate\Support\Str::slug($validated['name']) . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('img/products'), $imageName);
+            $validated['image'] = 'img/products/' . $imageName;
+        }
+
         $product->update($validated);
-        return redirect("/admin/products/{$product->id}")->with('success', 'Sản phẩm được cập nhật thành công');
+        return redirect('/admin/products')->with('success', 'Sản phẩm được cập nhật thành công');
     }
 
     /**
@@ -86,6 +121,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        // Delete image if exists
+        if ($product->image && file_exists(public_path($product->image))) {
+            unlink(public_path($product->image));
+        }
+        
         $product->delete();
         return redirect('/admin/products')->with('success', 'Sản phẩm đã được xóa');
     }

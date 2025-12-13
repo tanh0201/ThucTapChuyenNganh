@@ -54,7 +54,7 @@
                         @else
                             @if(is_admin())
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                                    <a class="nav-link" href="{{ route('admin.products.index') }}">
                                         <i class="fas fa-tachometer-alt"></i> {{ __('Admin Panel') }}
                                     </a>
                                 </li>
@@ -67,7 +67,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     @if(is_admin())
-                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                        <a class="dropdown-item" href="{{ route('admin.products.index') }}">
                                             <i class="fas fa-tachometer-alt"></i> {{ __('Admin Panel') }}
                                         </a>
                                         <hr class="dropdown-divider">

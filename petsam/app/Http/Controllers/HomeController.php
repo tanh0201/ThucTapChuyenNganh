@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\User;
-use App\Models\Order;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,18 +19,11 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function index()
     {
-        // Prepare statistics for admin users
-        $stats = [
-            'total_products' => Product::count(),
-            'total_orders' => Order::count(),
-            'total_users' => User::count(),
-            'total_categories' => Category::count(),
-        ];
-
-        return view('home', compact('stats'));
+        // Redirect to home page after login
+        return redirect('/');
     }
 }
