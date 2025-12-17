@@ -51,4 +51,20 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Permission::class, 'user_permissions');
     }
+
+    /**
+     * Relationship: User has many CustomerCare tickets
+     */
+    public function customerCareTickets()
+    {
+        return $this->hasMany(CustomerCare::class);
+    }
+
+    /**
+     * Relationship: User has many Ratings
+     */
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

@@ -121,9 +121,9 @@
 
                                 <!-- Overlay with buttons -->
                                 <div class="product-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end justify-content-center pb-3" style="background: rgba(0,0,0,0.6); opacity: 0; transition: all 0.3s;">
-                                    <button class="btn btn-light btn-sm px-4 py-2 view-product-btn" data-product-id="{{ $product->id }}">
+                                    <a href="{{ route('product.show', $product->id) }}" class="btn btn-light btn-sm px-4 py-2">
                                         <i class="fas fa-eye me-2"></i> Xem Chi Tiết
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
 
@@ -143,13 +143,24 @@
 
                                 <!-- Rating -->
                                 <div class="mb-3">
+                                    @php
+                                        $avgRating = $product->ratings()->where('status', 'approved')->avg('rating') ?? 0;
+                                        $ratingCount = $product->ratings()->where('status', 'approved')->count();
+                                        $fullStars = floor($avgRating);
+                                        $hasHalfStar = ($avgRating - $fullStars) >= 0.5;
+                                    @endphp
                                     <div class="text-warning small mb-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                        <span class="text-muted">({{ rand(50, 500) }})</span>
+                                        @for($i = 0; $i < $fullStars; $i++)
+                                            <i class="fas fa-star"></i>
+                                        @endfor
+                                        @if($hasHalfStar)
+                                            <i class="fas fa-star-half-alt"></i>
+                                            @php $fullStars++ @endphp
+                                        @endif
+                                        @for($i = $fullStars; $i < 5; $i++)
+                                            <i class="far fa-star"></i>
+                                        @endfor
+                                        <span class="text-muted">({{ $ratingCount }})</span>
                                     </div>
                                 </div>
 

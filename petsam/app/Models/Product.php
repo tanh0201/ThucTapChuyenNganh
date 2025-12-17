@@ -45,6 +45,14 @@ class Product extends Model
     }
 
     /**
+     * Relationship: Product has many Ratings
+     */
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    /**
      * Scope: Get only active products
      */
     public function scopeActive($query)

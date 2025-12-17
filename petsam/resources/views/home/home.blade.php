@@ -118,6 +118,33 @@
     </div>
 </section>
 
+<!-- ==================== CUSTOMER CARE CTA ==================== -->
+<section class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3 class="fw-bold display-5 mb-3">
+                    <i class="fas fa-question-circle me-2"></i> Có Câu Hỏi Hay Vấn Đề?
+                </h3>
+                <p class="fs-5 mb-4 text-white-50">
+                    Liên hệ với chúng tôi ngay hôm nay. Đội hỗ trợ của chúng tôi luôn sẵn sàng giúp bạn giải quyết bất kỳ vấn đề nào.
+                </p>
+                <a href="{{ route('customer-care.index') }}" class="btn btn-light btn-lg px-5 py-3 fw-bold" style="border-radius: 50px;">
+                    <i class="fas fa-paper-plane me-2"></i> Gửi Yêu Cầu Hỗ Trợ
+                </a>
+                @auth
+                    <p class="text-white-50 mt-3 mb-0">
+                        <i class="fas fa-check-circle me-1"></i> Xem yêu cầu của tôi <a href="{{ route('customer-care.my-tickets') }}" class="text-white fw-bold">tại đây</a>
+                    </p>
+                @endauth
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <i class="fas fa-headset" style="font-size: 150px; opacity: 0.2;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ==================== FEATURED PRODUCTS ==================== -->
 <section class="py-5 bg-light">
     <div class="container">
@@ -149,9 +176,9 @@
 
                         <!-- Overlay with buttons -->
                         <div class="product-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end justify-content-center pb-3" style="background: rgba(0,0,0,0.6); opacity: 0; transition: all 0.3s;">
-                            <button class="btn btn-light btn-sm px-4 py-2 view-product-btn" data-product-id="{{ $product->id }}">
+                            <a href="{{ route('product.show', $product->id) }}" class="btn btn-light btn-sm px-4 py-2">
                                 <i class="fas fa-eye me-2"></i> Xem Chi Tiết
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -171,13 +198,24 @@
 
                         <!-- Rating -->
                         <div class="mb-3">
+                            @php
+                                $avgRating = $product->ratings()->where('status', 'approved')->avg('rating') ?? 0;
+                                $ratingCount = $product->ratings()->where('status', 'approved')->count();
+                                $fullStars = floor($avgRating);
+                                $hasHalfStar = ($avgRating - $fullStars) >= 0.5;
+                            @endphp
                             <div class="text-warning small mb-2">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span class="text-muted">({{ rand(50, 500) }})</span>
+                                @for($i = 0; $i < $fullStars; $i++)
+                                    <i class="fas fa-star"></i>
+                                @endfor
+                                @if($hasHalfStar)
+                                    <i class="fas fa-star-half-alt"></i>
+                                    @php $fullStars++ @endphp
+                                @endif
+                                @for($i = $fullStars; $i < 5; $i++)
+                                    <i class="far fa-star"></i>
+                                @endfor
+                                <span class="text-muted">({{ $ratingCount }})</span>
                             </div>
                         </div>
 

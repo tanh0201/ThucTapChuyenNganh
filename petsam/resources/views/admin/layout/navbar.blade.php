@@ -45,6 +45,18 @@
             <span class="ms-2">Phân Quyền</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('admin.ratings.index') }}" title="Đánh giá sản phẩm">
+            <i class="fas fa-star"></i>
+            <span class="ms-2">Đánh Giá</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('admin.customer-care.index') }}" title="Chăm sóc khách hàng">
+            <i class="fas fa-headset"></i>
+            <span class="ms-2">Hỗ Trợ</span>
+          </a>
+        </li>
       </ul>
 
       <!-- Right Navigation -->

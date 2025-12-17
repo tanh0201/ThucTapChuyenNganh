@@ -28,8 +28,8 @@
   <!-- Navigation -->
   @include('admin.layout.navbar')
 
-  <div class="content-wrapper">
-    <div class="container-fluid px-4 py-4">
+  <div class="content-wrapper" style="margin-top: 180px;">
+    <div class="container-fluid px-4 py-4" style="padding-top: 40px;">
       <!-- Breadcrumbs -->
       @yield('breadcrumb')
 

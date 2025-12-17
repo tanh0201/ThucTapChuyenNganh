@@ -73,6 +73,12 @@
                                         <hr class="dropdown-divider">
                                     @endif
 
+                                    <a class="dropdown-item" href="{{ route('customer-care.my-tickets') }}">
+                                        <i class="fas fa-headset"></i> Yêu Cầu Hỗ Trợ
+                                    </a>
+
+                                    <hr class="dropdown-divider">
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
