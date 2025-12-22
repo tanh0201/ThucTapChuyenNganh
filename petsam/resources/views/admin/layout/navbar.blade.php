@@ -6,6 +6,12 @@
       <span style="font-size: 1.3rem;">PetSam Admin</span>
     </a>
 
+    <!-- Back to Home Button -->
+    <a href="/" class="btn btn-outline-light btn-sm ms-3" title="Về Trang Chủ">
+      <i class="fas fa-home me-1"></i>
+      <span class="d-none d-md-inline">Trang Chủ</span>
+    </a>
+
     <!-- Toggler Button -->
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -15,47 +21,69 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <!-- Left Navigation -->
       <ul class="navbar-nav me-auto">
+        <!-- Dashboard -->
         <li class="nav-item">
           <a class="nav-link" href="{{ route('admin.dashboard') }}" title="Dashboard">
             <i class="fas fa-tachometer-alt"></i>
             <span class="ms-2">Dashboard</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.products.index') }}" title="Sản phẩm">
-            <i class="fas fa-shopping-bag"></i>
-            <span class="ms-2">Sản Phẩm</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.categories.index') }}" title="Danh mục">
+
+        <!-- Danh Mục -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fas fa-folder"></i>
             <span class="ms-2">Danh Mục</span>
           </a>
+          <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+            <li><a class="dropdown-item" href="{{ route('admin.categories.index') }}"><i class="fas fa-list me-2"></i>Danh Sách Danh Mục</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.categories.create') }}"><i class="fas fa-plus me-2"></i>Thêm Danh Mục</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.users.index') }}" title="Người dùng">
-            <i class="fas fa-users"></i>
-            <span class="ms-2">Người Dùng</span>
+
+        <!-- Sản Phẩm Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="ms-2">Sản Phẩm</span>
           </a>
+          <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+            <li><a class="dropdown-item" href="{{ route('admin.products.index') }}"><i class="fas fa-box me-2"></i>Danh Sách Sản Phẩm</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.products.create') }}"><i class="fas fa-plus me-2"></i>Thêm Sản Phẩm</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.roles.index') }}" title="Phân quyền">
-            <i class="fas fa-user-shield"></i>
-            <span class="ms-2">Phân Quyền</span>
+
+        <!-- Quản Lý Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="managementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-tasks"></i>
+            <span class="ms-2">Quản Lý</span>
           </a>
+          <ul class="dropdown-menu" aria-labelledby="managementDropdown">
+            <li><h6 class="dropdown-header"><i class="fas fa-receipt me-2"></i>Bán Hàng</h6></li>
+            <li><a class="dropdown-item" href="{{ route('admin.orders.index') }}"><i class="fas fa-shopping-cart me-2"></i>Đơn Hàng</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.ratings.index') }}"><i class="fas fa-star me-2"></i>Đánh Giá</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header"><i class="fas fa-headset me-2"></i>Hỗ Trợ</h6></li>
+            <li><a class="dropdown-item" href="{{ route('admin.customer-care.index') }}"><i class="fas fa-comments me-2"></i>Hỗ Trợ Khách</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.contacts.index') }}"><i class="fas fa-envelope me-2"></i>Liên Hệ</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.email-logs.index') }}"><i class="fas fa-envelope-open me-2"></i>Email Logs</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.ratings.index') }}" title="Đánh giá sản phẩm">
-            <i class="fas fa-star"></i>
-            <span class="ms-2">Đánh Giá</span>
+
+        <!-- Hệ Thống Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="systemDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-cogs"></i>
+            <span class="ms-2">Hệ Thống</span>
           </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.customer-care.index') }}" title="Chăm sóc khách hàng">
-            <i class="fas fa-headset"></i>
-            <span class="ms-2">Hỗ Trợ</span>
-          </a>
+          <ul class="dropdown-menu" aria-labelledby="systemDropdown">
+            <li><a class="dropdown-item" href="{{ route('admin.users.index') }}"><i class="fas fa-users me-2"></i>Người Dùng</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.users.create') }}"><i class="fas fa-user-plus me-2"></i>Thêm Người Dùng</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{ route('admin.roles.index') }}"><i class="fas fa-user-shield me-2"></i>Phân Quyền</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.permissions.index') }}"><i class="fas fa-lock me-2"></i>Quyền</a></li>
+          </ul>
         </li>
       </ul>
 
@@ -80,8 +108,7 @@
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li><h6 class="dropdown-header">{{ Auth::user()->email }}</h6></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ Sơ</a></li>
-            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài Đặt</a></li>
+            <li><a class="dropdown-item" href="{{ route('settings.index') }}"><i class="fas fa-cog me-2"></i> Cài Đặt</a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
               <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -114,6 +141,7 @@
     color: rgba(255, 255, 255, 0.7) !important;
     transition: all 0.3s ease;
     padding: 0.5rem 1rem !important;
+    font-size: 0.95rem;
   }
 
   #mainNav .nav-link:hover,
@@ -122,18 +150,104 @@
     font-weight: 500;
   }
 
+  /* Dropdown hover effect - show on hover */
+  .navbar-nav .dropdown:hover > .dropdown-menu {
+    display: block;
+    animation: slideDown 0.2s ease-out;
+  }
+
+  .navbar-nav .dropdown > .dropdown-toggle::after {
+    transition: transform 0.3s ease;
+  }
+
+  .navbar-nav .dropdown:hover > .dropdown-toggle::after {
+    transform: rotate(180deg);
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Dropdown Menu Styling */
   .dropdown-menu {
     border: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border-radius: 0.5rem;
+    min-width: 200px;
+    top: 100%;
+  }
+
+  .dropdown-item {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
   }
 
   .dropdown-item:hover {
     background-color: #f8f9fa;
     color: #4e73df;
+    padding-left: 1.5rem;
+  }
+
+  .dropdown-header {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4e73df;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+  }
+
+  .dropdown-divider {
+    margin: 0.3rem 0;
+    opacity: 0.3;
+  }
+
+  /* Active dropdown link */
+  #mainNav .dropdown-menu .dropdown-item.active {
+    background-color: #4e73df;
+    color: white !important;
   }
 
   .avatar-circle {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   }
 </style>
+
+<script>
+  // Highlight active dropdown based on current route
+  document.addEventListener('DOMContentLoaded', function() {
+    const currentRoute = '{{ Route::currentRouteName() }}';
+    
+    // Check which dropdown should be active
+    const dropdownRoutes = {
+      'productsDropdown': ['admin.products.', 'admin.categories.'],
+      'managementDropdown': ['admin.orders.', 'admin.ratings.', 'admin.customer-care.', 'admin.contacts.', 'admin.email-logs.'],
+      'systemDropdown': ['admin.users.', 'admin.roles.', 'admin.permissions.']
+    };
+
+    for (let [dropdownId, routes] of Object.entries(dropdownRoutes)) {
+      const dropdown = document.getElementById(dropdownId);
+      if (routes.some(route => currentRoute.startsWith(route))) {
+        dropdown?.parentElement.classList.add('active');
+        dropdown?.classList.add('text-primary');
+      }
+    }
+
+    // Highlight active dropdown items
+    const items = document.querySelectorAll('.dropdown-item');
+    items.forEach(item => {
+      if (item.href === window.location.href) {
+        item.classList.add('active');
+      }
+    });
+  });
+</script>

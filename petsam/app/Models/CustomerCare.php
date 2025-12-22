@@ -34,7 +34,7 @@ class CustomerCare extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->nullable();
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -42,7 +42,7 @@ class CustomerCare extends Model
      */
     public function responder()
     {
-        return $this->belongsTo(User::class, 'responded_by')->nullable();
+        return $this->belongsTo(User::class, 'responded_by');
     }
 
     /**

@@ -67,4 +67,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rating::class);
     }
+
+    /**
+     * Relationship: User has many Favorites
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }

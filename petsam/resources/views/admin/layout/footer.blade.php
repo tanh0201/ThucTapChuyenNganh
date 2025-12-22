@@ -5,6 +5,10 @@
         <small class="text-muted">
           &copy; 2025 <strong>PetSam Admin</strong>. All rights reserved.
         </small>
+        <br>
+        <small class="text-muted">
+          Đồ án thực tập chuyên ngành - Sinh viên: <strong>Nguyễn Văn Tuấn Anh</strong> (MSSV: <strong>DH52200334</strong>) | <a href="tel:0798561413" class="text-decoration-none text-muted">0798561413</a>
+        </small>
       </div>
     </div>
   </div>

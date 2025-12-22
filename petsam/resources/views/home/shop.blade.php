@@ -25,81 +25,124 @@
                             <i class="fas fa-filter me-2 text-primary"></i>Bộ Lọc
                         </h5>
 
-                        <!-- Category Filter -->
-                        <div class="mb-4">
-                            <h6 class="fw-bold mb-3">Danh Mục</h6>
-                            @foreach($categories ?? [] as $cat)
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="cat{{ $cat->id }}" value="{{ $cat->id }}">
-                                <label class="form-check-label" for="cat{{ $cat->id }}">
-                                    {{ $cat->name }} ({{ $cat->products_count ?? 0 }})
-                                </label>
+                        <form method="GET" action="{{ route('shop') }}" id="filterForm">
+                            <!-- Category Filter -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3">Danh Mục</h6>
+                                @foreach($categories ?? [] as $cat)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="cat{{ $cat->id }}" name="category" value="{{ $cat->id }}" @if(request('category') == $cat->id) checked @endif>
+                                    <label class="form-check-label" for="cat{{ $cat->id }}">
+                                        {{ $cat->name }}
+                                    </label>
+                                </div>
+                                @endforeach
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="radio" id="catAll" name="category" value="" @if(!request('category')) checked @endif>
+                                    <label class="form-check-label" for="catAll">
+                                        Tất cả danh mục
+                                    </label>
+                                </div>
                             </div>
-                            @endforeach
-                        </div>
 
-                        <hr>
+                            <hr>
 
-                        <!-- Price Filter -->
-                        <div class="mb-4">
-                            <h6 class="fw-bold mb-3">Giá</h6>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="price1">
-                                <label class="form-check-label" for="price1">
-                                    Dưới 500k
-                                </label>
+                            <!-- Price Filter -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3">Giá</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input price-filter" type="radio" id="price1" name="price_range" value="0-500000" @if(request('min_price') == '0' && request('max_price') == '500000') checked @endif>
+                                    <label class="form-check-label" for="price1">
+                                        Dưới 500k
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input price-filter" type="radio" id="price2" name="price_range" value="500000-1000000" @if(request('min_price') == '500000' && request('max_price') == '1000000') checked @endif>
+                                    <label class="form-check-label" for="price2">
+                                        500k - 1 triệu
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input price-filter" type="radio" id="price3" name="price_range" value="1000000-5000000" @if(request('min_price') == '1000000' && request('max_price') == '5000000') checked @endif>
+                                    <label class="form-check-label" for="price3">
+                                        1 - 5 triệu
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input price-filter" type="radio" id="price4" name="price_range" value="5000000-999999999" @if(request('min_price') == '5000000') checked @endif>
+                                    <label class="form-check-label" for="price4">
+                                        Trên 5 triệu
+                                    </label>
+                                </div>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input price-filter" type="radio" id="priceAll" name="price_range" value="" @if(!request('min_price') && !request('max_price')) checked @endif>
+                                    <label class="form-check-label" for="priceAll">
+                                        Tất cả giá
+                                    </label>
+                                </div>
+                                <input type="hidden" name="min_price" value="{{ request('min_price', '') }}">
+                                <input type="hidden" name="max_price" value="{{ request('max_price', '') }}">
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="price2">
-                                <label class="form-check-label" for="price2">
-                                    500k - 1 triệu
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="price3">
-                                <label class="form-check-label" for="price3">
-                                    1 - 5 triệu
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="price4">
-                                <label class="form-check-label" for="price4">
-                                    Trên 5 triệu
-                                </label>
-                            </div>
-                        </div>
 
-                        <hr>
+                            <hr>
 
-                        <!-- Reset Button -->
-                        <button class="btn btn-outline-primary w-100" onclick="resetFilters()">
-                            <i class="fas fa-redo me-2"></i>Xóa Bộ Lọc
-                        </button>
+                            <!-- Sort -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3">Sắp Xếp</h6>
+                                <select class="form-select form-select-sm" name="sort" onchange="document.getElementById('filterForm').submit();">
+                                    <option value="latest" @if(request('sort', 'latest') === 'latest') selected @endif>Mới nhất</option>
+                                    <option value="price_asc" @if(request('sort') === 'price_asc') selected @endif>Giá: Thấp đến Cao</option>
+                                    <option value="price_desc" @if(request('sort') === 'price_desc') selected @endif>Giá: Cao đến Thấp</option>
+                                    <option value="popular" @if(request('sort') === 'popular') selected @endif>Phổ biến nhất</option>
+                                    <option value="rating" @if(request('sort') === 'rating') selected @endif>Đánh giá cao nhất</option>
+                                </select>
+                            </div>
+
+                            <hr>
+
+                            <!-- Filter & Reset Buttons -->
+                            <button type="submit" class="btn btn-primary w-100 mb-2">
+                                <i class="fas fa-filter me-2"></i>Áp Dụng Lọc
+                            </button>
+                            <a href="{{ route('shop') }}" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-redo me-2"></i>Xóa Bộ Lọc
+                            </a>
+                        </form>
                     </div>
                 </div>
             </div>
 
             <!-- Products Grid -->
             <div class="col-lg-9">
+                <!-- Search Results Info -->
+                @if(request('search'))
+                <div class="alert alert-info mb-4" role="alert">
+                    <i class="fas fa-search me-2"></i>
+                    Kết quả tìm kiếm cho: <strong>"{{ request('search') }}"</strong>
+                </div>
+                @endif
+
                 <!-- Sort & View Options -->
                 <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <p class="text-muted mb-0">
                         Hiển thị <strong>{{ $products->total() ?? 0 }}</strong> sản phẩm
                     </p>
                     <div class="d-flex gap-2">
-                        <select class="form-select form-select-sm" style="max-width: 200px;">
-                            <option>Sắp xếp mặc định</option>
-                            <option>Mới nhất</option>
-                            <option>Giá: Thấp đến Cao</option>
-                            <option>Giá: Cao đến Thấp</option>
-                            <option>Phổ biến nhất</option>
+                        <select class="form-select form-select-sm" style="max-width: 200px;" name="sort" onchange="applySortFilter(this);">
+                            <option value="latest" @if(request('sort', 'latest') === 'latest') selected @endif>Mới nhất</option>
+                            <option value="price_asc" @if(request('sort') === 'price_asc') selected @endif>Giá: Thấp đến Cao</option>
+                            <option value="price_desc" @if(request('sort') === 'price_desc') selected @endif>Giá: Cao đến Thấp</option>
+                            <option value="popular" @if(request('sort') === 'popular') selected @endif>Phổ biến nhất</option>
+                            <option value="rating" @if(request('sort') === 'rating') selected @endif>Đánh giá cao nhất</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- Products Grid -->
                 <div class="row g-4">
-                    @forelse($products ?? [] as $product)
+                    @if($products && count($products) > 0)
+                        @foreach($products as $product)
+                        @if($product)
                     <div class="col-md-6 col-lg-4 col-xl-3">
                         <div class="product-card h-100 rounded-lg overflow-hidden" style="background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: all 0.3s; border: none;">
                             <!-- Product Image -->
@@ -171,12 +214,14 @@
                             </div>
                         </div>
                     </div>
-                    @empty
+                    @endif
+                        @endforeach
+                    @else
                     <div class="col-12 text-center py-5">
                         <i class="fas fa-inbox text-muted" style="font-size: 3rem; margin-bottom: 20px;"></i>
                         <p class="text-muted">Chưa có sản phẩm nào</p>
                     </div>
-                    @endforelse
+                    @endif
                 </div>
 
                 <!-- Pagination -->
@@ -261,19 +306,62 @@
 </style>
 
 <script>
-    function resetFilters() {
-        document.querySelectorAll('.form-check-input').forEach(input => {
-            input.checked = false;
-        });
-        alert('Đã xóa bộ lọc');
+    // Handle sort filter
+    function applySortFilter(selectElement) {
+        const sortValue = selectElement.value;
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('sort', sortValue);
+        window.location.href = currentUrl.toString();
     }
+
+    // Handle price filter
+    document.querySelectorAll('.price-filter').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const [minPrice, maxPrice] = this.value ? this.value.split('-') : ['', ''];
+            document.querySelector('input[name="min_price"]').value = minPrice;
+            document.querySelector('input[name="max_price"]').value = maxPrice;
+            document.getElementById('filterForm').submit();
+        });
+    });
 
     // Add to Cart button
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const productId = this.dataset.productId;
-            alert('Sản phẩm đã được thêm vào giỏ hàng!');
+            
+            fetch('{{ route("cart.add") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success alert
+                    alert(data.message);
+                    
+                    // Update cart count in navbar
+                    fetch('{{ route("cart.count") }}')
+                        .then(res => res.json())
+                        .then(json => {
+                            const cartBadge = document.querySelector('.cart-count');
+                            if (cartBadge) cartBadge.textContent = json.count;
+                        });
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra. Vui lòng thử lại!');
+            });
         });
     });
 

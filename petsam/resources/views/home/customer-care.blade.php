@@ -1,19 +1,30 @@
-@extends('layouts.app')
+@extends('layout/app')
 
 @section('content')
 <div class="container mt-5 mb-5">
     <div class="row">
         <div class="col-lg-8 mx-auto">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        <i class="fas fa-headset"></i> Chăm Sóc Khách Hàng
-                    </h4>
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">
+                    <i class="fas fa-headset text-primary"></i> Hỗ Trợ Khách Hàng
+                </h2>
+                @auth
+                <a href="{{ route('customer-care.my-tickets') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-list me-2"></i>Xem Yêu Cầu Của Tôi
+                </a>
+                @endauth
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                    <h5 class="mb-0">
+                        <i class="fas fa-paper-plane me-2"></i>Gửi Yêu Cầu Hỗ Trợ
+                    </h5>
                 </div>
                 <div class="card-body p-4">
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Lỗi!</strong>
+                            <i class="fas fa-exclamation-circle me-2"></i><strong>Lỗi Xác Thực!</strong>
                             <ul class="mb-0 mt-2">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -25,14 +36,16 @@
 
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fas fa-check-circle"></i> {{ session('success') }}
+                            <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
-                    <p class="text-muted mb-4">
-                        Bạn có bất kỳ câu hỏi hoặc vấn đề nào? Vui lòng điền vào mẫu bên dưới và chúng tôi sẽ sớm liên hệ với bạn.
-                    </p>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Chúng tôi ở đây để giúp bạn!</strong> Vui lòng mô tả chi tiết vấn đề của bạn và đội ngũ hỗ trợ sẽ phản hồi trong vòng 24 giờ.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
 
                     <form action="{{ route('customer-care.store') }}" method="POST">
                         @csrf
@@ -83,37 +96,52 @@
                             @enderror
                         </div>
 
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Gửi Yêu Cầu
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Gửi Yêu Cầu
                             </button>
-                            <a href="{{ route('customer-care.my-tickets') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-list"></i> Xem Yêu Cầu Của Tôi
+                            @auth
+                            <a href="{{ route('customer-care.my-tickets') }}" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-list me-2"></i>Xem Lịch Sử
                             </a>
+                            @endauth
                         </div>
                     </form>
                 </div>
             </div>
 
             <!-- Info Cards -->
-            <div class="row mt-5">
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100 border-left border-primary">
-                        <div class="card-body">
-                            <h6 class="text-primary">
-                                <i class="fas fa-clock"></i> Thời Gian Phản Hồi
-                            </h6>
-                            <p class="mb-0">Chúng tôi thường trả lời trong vòng 24 giờ</p>
+            <div class="row mt-5 g-3">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        <div class="card-body text-center">
+                            <div class="feature-icon bg-primary bg-opacity-10 rounded-circle p-3 mb-3 d-inline-block">
+                                <i class="fas fa-clock text-primary fa-2x"></i>
+                            </div>
+                            <h6 class="card-title fw-bold">Phản Hồi Nhanh</h6>
+                            <p class="card-text small text-muted mb-0">Chúng tôi thường trả lời trong vòng 24 giờ</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100 border-left border-success">
-                        <div class="card-body">
-                            <h6 class="text-success">
-                                <i class="fas fa-shield-alt"></i> An Toàn
-                            </h6>
-                            <p class="mb-0">Thông tin của bạn được bảo mật tuyệt đối</p>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        <div class="card-body text-center">
+                            <div class="feature-icon bg-success bg-opacity-10 rounded-circle p-3 mb-3 d-inline-block">
+                                <i class="fas fa-shield-alt text-success fa-2x"></i>
+                            </div>
+                            <h6 class="card-title fw-bold">Bảo Mật Tuyệt Đối</h6>
+                            <p class="card-text small text-muted mb-0">Thông tin của bạn được bảo vệ an toàn</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        <div class="card-body text-center">
+                            <div class="feature-icon bg-info bg-opacity-10 rounded-circle p-3 mb-3 d-inline-block">
+                                <i class="fas fa-headset text-info fa-2x"></i>
+                            </div>
+                            <h6 class="card-title fw-bold">Hỗ Trợ 24/7</h6>
+                            <p class="card-text small text-muted mb-0">Đội ngũ hỗ trợ sẵn sàng giúp bạn bất cứ lúc nào</p>
                         </div>
                     </div>
                 </div>

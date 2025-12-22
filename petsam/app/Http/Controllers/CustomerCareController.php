@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomerCare;
+use App\Models\User;
+use App\Mail\NewCustomerCareMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class CustomerCareController extends Controller
 {
@@ -44,7 +48,7 @@ class CustomerCareController extends Controller
             'message.min' => 'Nội dung phải ít nhất 10 ký tự',
         ]);
 
-        CustomerCare::create([
+        $ticket = CustomerCare::create([
             'user_id' => Auth::id(),
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -53,6 +57,14 @@ class CustomerCareController extends Controller
             'message' => $validated['message'],
             'status' => 'pending',
         ]);
+
+        // Send notification email to admin
+        try {
+            $adminEmail = config('mail.from.address') ?? env('ADMIN_EMAIL', 'admin@petsam.local');
+            Mail::to($adminEmail)->send(new NewCustomerCareMail($ticket));
+        } catch (\Exception $e) {
+            Log::error('Failed to send new support ticket notification: ' . $e->getMessage());
+        }
 
         return redirect()->route('customer-care.my-tickets')->with('success', 'Yêu cầu của bạn đã được gửi thành công. Chúng tôi sẽ sớm liên hệ với bạn!');
     }
@@ -106,9 +118,13 @@ class CustomerCareController extends Controller
     {
         $tickets = null;
         if (Auth::check()) {
-            $tickets = Auth::user()->customerCareTickets()
-                ->latest()
-                ->paginate(10);
+            /** @var User $user */
+            $user = Auth::user();
+            if ($user) {
+                $tickets = $user->customerCareTickets()
+                    ->latest()
+                    ->paginate(10);
+            }
         }
         return view('home.my-tickets', compact('tickets'));
     }

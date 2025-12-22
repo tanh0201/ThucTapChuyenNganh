@@ -83,21 +83,29 @@
             </div>
 
             <!-- Add to Cart & Actions -->
-            <div class="d-grid gap-2 d-sm-flex">
-                <button class="btn btn-primary btn-lg" onclick="alert('Tính năng thêm vào giỏ hàng đang phát triển')">
-                    <i class="fas fa-shopping-cart me-2"></i> Thêm Vào Giỏ
-                </button>
+            <div class="mb-4">
+                <label for="quantity" class="form-label fw-semibold">Số lượng:</label>
+                <div class="input-group mb-3" style="max-width: 150px;">
+                    <button class="btn btn-outline-secondary" type="button" id="qty-minus">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" class="form-control text-center" id="quantity" value="1" min="1" max="{{ $product->stock }}">
+                    <button class="btn btn-outline-secondary" type="button" id="qty-plus">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                @if ($product->stock > 0)
+                    <button class="btn btn-primary btn-lg w-100" id="add-to-cart-btn">
+                        <i class="fas fa-shopping-cart me-2"></i> Thêm Vào Giỏ
+                    </button>
+                @else
+                    <button class="btn btn-secondary btn-lg w-100" disabled>
+                        <i class="fas fa-ban me-2"></i> Hết Hàng
+                    </button>
+                @endif
             </div>
 
-            <!-- Rating & Support Section -->
-            <hr class="my-4">
-            <div class="row">
-                <div class="col-md-6">
-                    <a href="#ratings" class="btn btn-outline-secondary btn-sm w-100">
-                        <i class="fas fa-star me-2"></i> Xem Đánh Giá & Bình Luận
-                    </a>
-                </div>
-                <div class="col-md-6">
+            <div class="d-grid gap-2 d-sm-flex"
                     <a href="{{ route('customer-care.create') }}" class="btn btn-outline-info btn-sm w-100">
                         <i class="fas fa-headset me-2"></i> Hỏi Hỗ Trợ
                     </a>
@@ -242,4 +250,83 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const productId = {{ $product->id }};
+    const maxStock = {{ $product->stock }};
+    const quantityInput = document.getElementById('quantity');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    const qtyMinus = document.getElementById('qty-minus');
+    const qtyPlus = document.getElementById('qty-plus');
+
+    // Quantity controls
+    qtyMinus.addEventListener('click', function() {
+        let currentQty = parseInt(quantityInput.value);
+        if (currentQty > 1) {
+            quantityInput.value = currentQty - 1;
+        }
+    });
+
+    qtyPlus.addEventListener('click', function() {
+        let currentQty = parseInt(quantityInput.value);
+        if (currentQty < maxStock) {
+            quantityInput.value = currentQty + 1;
+        }
+    });
+
+    quantityInput.addEventListener('change', function() {
+        if (this.value < 1) this.value = 1;
+        if (this.value > maxStock) this.value = maxStock;
+    });
+
+    // Add to cart
+    addToCartBtn.addEventListener('click', function() {
+        const quantity = parseInt(quantityInput.value);
+        
+        fetch('{{ route("cart.add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                alertDiv.role = 'alert';
+                alertDiv.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>${data.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector('main').insertBefore(alertDiv, document.querySelector('.container'));
+                
+                // Update cart count
+                fetch('{{ route("cart.count") }}')
+                    .then(res => res.json())
+                    .then(json => {
+                        const cartBadge = document.querySelector('.cart-count');
+                        if (cartBadge) cartBadge.textContent = json.count;
+                    });
+                
+                // Reset quantity
+                quantityInput.value = 1;
+            } else {
+                alert('Lỗi: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra. Vui lòng thử lại!');
+        });
+    });
+});
+</script>
 @endsection

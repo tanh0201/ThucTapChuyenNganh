@@ -2,8 +2,7 @@
 <html lang="vi">
 
 <head>
-    <meta charset="utf-8">
-    <title>@yield('title', 'PetSam - Cửa hàng phụ kiện thú cưng')</title>
+    <meta charset="utf-8">    <meta name="csrf-token" content="{{ csrf_token() }}">    <title>@yield('title', 'PetSam - Cửa hàng phụ kiện thú cưng')</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="keywords" content="PetSam, phụ kiện thú cưng, pet, dog, cat, hamster, aquarium">
     <meta name="description" content="@yield('description', 'PetSam - Cửa hàng phụ kiện thú cưng trực tuyến. Giao hàng nhanh toàn quốc.')">
@@ -21,6 +20,19 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+    </style>
     
     @yield('additional-css')
 </head>

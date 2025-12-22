@@ -2,15 +2,17 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
     <div class="container-fluid px-4">
         <!-- Logo + Search -->
-        <div class="d-flex align-items-center flex-grow-1">
+        <div class="d-flex align-items-center grow">
             <a href="/" class="navbar-brand fw-bold text-white me-4">
                 <i class="fas fa-paw me-2"></i>PetSam
             </a>
             <div class="input-group d-none d-lg-flex" style="max-width: 400px;">
-                <input type="text" class="form-control form-control-sm" placeholder="Tìm sản phẩm...">
-                <button class="btn btn-light btn-sm" type="button">
-                    <i class="fas fa-search"></i>
-                </button>
+                <form class="input-group w-100" method="GET" action="{{ route('search') }}">
+                    <input type="text" class="form-control form-control-sm" placeholder="Tìm sản phẩm, danh mục..." name="q" value="{{ request('q') }}" required>
+                    <button class="btn btn-light btn-sm" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
             </div>
         </div>
 
@@ -49,7 +51,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Liên hệ</a>
+                    <a class="nav-link" href="{{ route('contact.index') }}">Liên hệ</a>
                 </li>
                 <li class="nav-item dropdown">
                     @auth
@@ -58,10 +60,14 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             @if(Auth::user()->role_id == 1)
-                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Admin</a></li>
-                                <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Admin Panel</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             @endif
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Cài đặt</a></li>
+                            <li><a class="dropdown-item" href="{{ route('checkout.myOrders') }}"><i class="fas fa-box me-2"></i>Đơn hàng của tôi</a></li>
+                            <li><a class="dropdown-item" href="{{ route('customer-care.my-tickets') }}"><i class="fas fa-headset me-2"></i>Hỗ trợ khách hàng</a></li>
+                            <li><a class="dropdown-item" href="{{ route('favorites.index') }}"><i class="fas fa-heart me-2"></i>Sản phẩm yêu thích</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('settings.index') }}"><i class="fas fa-cog me-2"></i>Cài đặt</a></li>
                             <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
                         </ul>
@@ -69,8 +75,17 @@
                         <a class="nav-link" href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i> Đăng nhập</a>
                     @endauth
                 </li>
+                @auth
+                @if(Auth::user()->role_id == 1)
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link btn btn-warning btn-sm fw-bold" href="{{ route('admin.dashboard') }}" title="Admin Dashboard">
+                        <i class="fas fa-shield-alt me-1"></i>Admin
+                    </a>
+                </li>
+                @endif
+                @endauth
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('cart.index') }}">
                         <i class="fas fa-shopping-cart"></i>
                     </a>
                 </li>

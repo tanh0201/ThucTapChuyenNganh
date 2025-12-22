@@ -372,7 +372,36 @@
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const productId = this.dataset.productId;
-            alert('Sản phẩm đã được thêm vào giỏ hàng!');
+            
+            fetch('{{ route("cart.add") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    fetch('{{ route("cart.count") }}')
+                        .then(res => res.json())
+                        .then(json => {
+                            const cartBadge = document.querySelector('.cart-count');
+                            if (cartBadge) cartBadge.textContent = json.count;
+                        });
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra. Vui lòng thử lại!');
+            });
         });
     });
 

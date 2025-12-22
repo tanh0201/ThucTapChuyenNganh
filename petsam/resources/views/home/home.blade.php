@@ -59,13 +59,13 @@
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="stat-card p-4">
-                    <h2 class="display-5 text-info fw-bold mb-2">10K+</h2>
+                    <h2 class="display-5 text-info fw-bold mb-2">{{ number_format($totalCustomers ?? 0) }}+</h2>
                     <p class="text-muted mb-0">Khách hàng hài lòng</p>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
                 <div class="stat-card p-4">
-                    <h2 class="display-5 text-warning fw-bold mb-2">⭐ 4.9</h2>
+                    <h2 class="display-5 text-warning fw-bold mb-2">⭐ {{ number_format($avgRating ?? 0, 1) }}</h2>
                     <p class="text-muted mb-0">Đánh giá trung bình</p>
                 </div>
             </div>
@@ -297,48 +297,29 @@
     <div class="container">
         <h2 class="fw-bold display-5 text-center mb-5">Đánh Giá Từ Khách Hàng</h2>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="testimonial-card p-4 rounded-lg" style="background: white; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
-                    <div class="mb-3">
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
+            @if($ratings && count($ratings) > 0)
+                @foreach($ratings->take(3) as $rating)
+                <div class="col-md-4">
+                    <div class="testimonial-card p-4 rounded-lg" style="background: white; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                        <div class="mb-3">
+                            @for($i = 0; $i < $rating->rating; $i++)
+                                <i class="fas fa-star text-warning"></i>
+                            @endfor
+                            @for($i = $rating->rating; $i < 5; $i++)
+                                <i class="far fa-star text-warning"></i>
+                            @endfor
+                        </div>
+                        <p class="mb-3">"{{ $rating->comment }}"</p>
+                        <p class="fw-bold mb-1">{{ $rating->user->name ?? 'Khách hàng' }}</p>
+                        <p class="text-muted small">{{ $rating->product->name ?? 'Sản phẩm' }}</p>
                     </div>
-                    <p class="mb-3">"Sản phẩm chất lượng, giao hàng nhanh. Chó của tôi rất thích dây dắt mới từ PetSam!"</p>
-                    <p class="fw-bold mb-1">Nguyễn Thị A</p>
-                    <p class="text-muted small">TP. Hồ Chí Minh</p>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="testimonial-card p-4 rounded-lg" style="background: white; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
-                    <div class="mb-3">
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                    </div>
-                    <p class="mb-3">"Mèo của tôi rất thích áo ấm. Chất lượng tốt, giá hợp lý. Sẽ mua lại!"</p>
-                    <p class="fw-bold mb-1">Trần Văn B</p>
-                    <p class="text-muted small">Hà Nội</p>
+                @endforeach
+            @else
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">Chưa có đánh giá nào</p>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="testimonial-card p-4 rounded-lg" style="background: white; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
-                    <div class="mb-3">
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                    </div>
-                    <p class="mb-3">"Hỗ trợ khách hàng rất tốt. Mình có thắc mắc được giải đáp nhanh chóng."</p>
-                    <p class="fw-bold mb-1">Lê Thị C</p>
-                    <p class="text-muted small">Đà Nẵng</p>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 </section>
@@ -445,8 +426,36 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const productId = this.dataset.productId;
-                alert('Sản phẩm đã được thêm vào giỏ hàng!');
-                // TODO: Integrate with shopping cart API
+                
+                fetch('{{ route("cart.add") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: 1
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        fetch('{{ route("cart.count") }}')
+                            .then(res => res.json())
+                            .then(json => {
+                                const cartBadge = document.querySelector('.cart-count');
+                                if (cartBadge) cartBadge.textContent = json.count;
+                            });
+                    } else {
+                        alert('Lỗi: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra. Vui lòng thử lại!');
+                });
             });
         });
 

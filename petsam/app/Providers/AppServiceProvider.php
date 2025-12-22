@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use App\Listeners\LogEmailListener;
+use Illuminate\Mail\Events\MessageSending;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +23,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        // Listen to email sending events and log them
+        \Illuminate\Support\Facades\Event::listen(
+            MessageSending::class,
+            LogEmailListener::class
+        );
     }
 }

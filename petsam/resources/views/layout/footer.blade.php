@@ -41,8 +41,11 @@
         </div>
         <hr class="bg-secondary my-4">
         <div class="row">
-            <div class="col-12 text-center text-muted small">
-                <p class="mb-0">&copy; 2025 <strong>PetSam</strong>. All rights reserved.</p>
+            <div class="col-12 text-center small" style="color: #adb5bd;">
+                <p class="mb-2">&copy; 2025 <strong style="color: #fff;">PetSam</strong>. All rights reserved.</p>
+                <p class="mb-1"><small>Đồ án thực tập chuyên ngành</small></p>
+                <p class="mb-1"><small>Sinh viên: <strong style="color: #fff;">Nguyễn Văn Tuấn Anh</strong> | MSSV: <strong style="color: #fff;">DH52200334</strong></small></p>
+                <p class="mb-0"><small>Liên hệ: <a href="tel:0798561413" class="text-decoration-none" style="color: #0dcaf0; font-weight: bold;">0798561413</a></small></p>
             </div>
         </div>
     </div>
@@ -50,7 +53,7 @@
 <!-- Footer End -->
 
 <!-- Back to Top Button -->
-<a href="#" class="btn btn-primary btn-lg-square back-to-top" style="position: fixed; bottom: 1rem; right: 1rem; display: none; z-index: 99;">
+<a href="#" class="btn btn-primary btn-lg-square back-to-top" style="position: fixed; bottom: 1rem; right: 1rem; display: none; z-index: 10;">
     <i class="fas fa-arrow-up"></i>
 </a>
 
