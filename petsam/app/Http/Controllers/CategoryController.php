@@ -45,12 +45,12 @@ class CategoryController extends Controller
     }
 
     /**
-     * Get category with its products (for AJAX)
+     * Get category with its products
      */
     public function getProducts(Category $category, Request $request)
     {
         if ($category->status !== 'active') {
-            return response()->json(['error' => 'Danh mục không khả dụng'], 404);
+            return abort(404);
         }
 
         $query = Product::where('category_id', $category->id)
@@ -83,11 +83,20 @@ class CategoryController extends Controller
         }
 
         $products = $query->paginate(12);
+        $categories = Category::where('status', 'active')->orderBy('name')->get();
+        
+        // Add product count to each category
+        $categories->each(function ($cat) {
+            $cat->products_count = Product::where('category_id', $cat->id)
+                ->where('status', 'active')
+                ->count();
+        });
 
-        return response()->json([
-            'category' => $category,
+        return view('home.categories', [
+            'selectedCategory' => $category,
             'products' => $products,
-            'total' => $products->total()
+            'categories' => $categories,
+            'totalCategories' => $categories->count()
         ]);
     }
 }
