@@ -72,8 +72,11 @@
                 </p>
                 <p class="mb-0">
                     <strong>Tình Trạng:</strong> 
-                    <span class="badge bg-success">Còn Hàng</span>
-                </p>
+                    @if($product->stock > 0)
+                        <span class="text-success">Còn Hàng ({{ $product->stock }} sản phẩm)</span>
+                    @else
+                        <span class="text-danger">Hết Hàng</span>
+                    @endif
             </div>
 
             <!-- Description -->
@@ -198,10 +201,9 @@
 
                             <!-- Comment -->
                             <div class="mb-3">
-                                <label for="comment" class="form-label fw-bold">Bình Luận <span class="text-danger">*</span></label>
+                                <label for="comment" class="form-label fw-bold">Bình Luận</label>
                                 <textarea name="comment" id="comment" class="form-control" rows="4" 
-                                          placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này..." required></textarea>
-                                <small class="text-muted">Tối thiểu 10 ký tự</small>
+                                          placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này..."></textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary">
@@ -295,7 +297,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 quantity: quantity
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server error: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 // Show success message
@@ -306,15 +313,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     <i class="fas fa-check-circle me-2"></i>${data.message}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 `;
-                document.querySelector('main').insertBefore(alertDiv, document.querySelector('.container'));
+                const mainElement = document.querySelector('main') || document.querySelector('body');
+                const containerElement = document.querySelector('.container');
+                if (mainElement && containerElement) {
+                    mainElement.insertBefore(alertDiv, containerElement);
+                } else if (mainElement) {
+                    mainElement.insertBefore(alertDiv, mainElement.firstChild);
+                }
                 
                 // Update cart count
                 fetch('{{ route("cart.count") }}')
-                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.ok) throw new Error('Failed to fetch cart count');
+                        return res.json();
+                    })
                     .then(json => {
                         const cartBadge = document.querySelector('.cart-count');
                         if (cartBadge) cartBadge.textContent = json.count;
-                    });
+                    })
+                    .catch(err => console.error('Error updating cart count:', err));
                 
                 // Reset quantity
                 quantityInput.value = 1;

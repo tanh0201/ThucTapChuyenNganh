@@ -384,16 +384,25 @@
                     quantity: 1
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server error: ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     alert(data.message);
                     fetch('{{ route("cart.count") }}')
-                        .then(res => res.json())
+                        .then(res => {
+                            if (!res.ok) throw new Error('Failed to fetch cart count');
+                            return res.json();
+                        })
                         .then(json => {
                             const cartBadge = document.querySelector('.cart-count');
                             if (cartBadge) cartBadge.textContent = json.count;
-                        });
+                        })
+                        .catch(err => console.error('Error updating cart count:', err));
                 } else {
                     alert('Lỗi: ' + data.message);
                 }

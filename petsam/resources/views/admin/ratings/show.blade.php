@@ -141,9 +141,8 @@
                     <div class="mb-3">
                         <label for="status" class="form-label fw-bold">Trạng Thái</label>
                         <select name="status" id="status" class="form-select">
-                            <option value="pending" {{ $rating->status == 'pending' ? 'selected' : '' }}>Chờ Duyệt</option>
-                            <option value="approved" {{ $rating->status == 'approved' ? 'selected' : '' }}>Đã Duyệt</option>
-                            <option value="rejected" {{ $rating->status == 'rejected' ? 'selected' : '' }}>Từ Chối</option>
+                            <option value="approved" {{ $rating->status == 'approved' ? 'selected' : '' }}>Đã Hiển Thị</option>
+                            <option value="rejected" {{ $rating->status == 'rejected' ? 'selected' : '' }}>Ẩn</option>
                         </select>
                     </div>
 
@@ -175,24 +174,19 @@
                 </h6>
             </div>
             <div class="card-body">
-                @if ($rating->status == 'pending')
-                    <form action="{{ route('admin.ratings.approve', $rating->id) }}" method="POST" class="mb-2">
-                        @csrf
-                        <button type="submit" class="btn btn-success w-100">
-                            <i class="fas fa-check-circle me-1"></i> Phê Duyệt
-                        </button>
-                    </form>
-                    <form action="{{ route('admin.ratings.reject', $rating->id) }}" method="POST" class="mb-2">
-                        @csrf
-                        <button type="submit" class="btn btn-danger w-100">
-                            <i class="fas fa-times-circle me-1"></i> Từ Chối
-                        </button>
-                    </form>
-                @else
-                    <div class="alert alert-info mb-2">
-                        <small><i class="fas fa-info-circle me-1"></i> Đánh giá đã được xử lý</small>
-                    </div>
-                @endif
+                <form action="{{ route('admin.ratings.update', $rating->id) }}" method="POST" class="mb-2">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="rating" value="{{ $rating->rating }}">
+                    <input type="hidden" name="comment" value="{{ $rating->comment }}">
+                    <select name="status" class="form-select form-select-sm mb-2">
+                        <option value="approved" {{ $rating->status == 'approved' ? 'selected' : '' }}>Đã Hiển Thị</option>
+                        <option value="rejected" {{ $rating->status == 'rejected' ? 'selected' : '' }}>Ẩn</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-save me-1"></i> Cập Nhật
+                    </button>
+                </form>
 
                 <form action="{{ route('admin.ratings.destroy', $rating->id) }}" method="POST" 
                       onsubmit="return confirm('Bạn chắc chắn muốn xóa?')">

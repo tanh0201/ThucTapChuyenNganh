@@ -40,53 +40,38 @@ Route::get('/', function () {
 // Frontend Routes
 Route::group([], function () {
     Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('search');
-    
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
     Route::get('/categories/{category}/products', [CategoryController::class, 'getProducts'])->name('categories.products');
-    
     Route::get('/shop', [ProductController::class, 'index'])->name('shop');
     Route::get('/api/products/filter', [ProductController::class, 'filter'])->name('products.filter');
-    
     Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
-    
-    // Customer Care Routes - my-tickets must be defined before resource route
-    Route::get('/customer-care/my-tickets', [CustomerCareController::class, 'myTickets'])->name('customer-care.my-tickets');
     Route::resource('customer-care', CustomerCareController::class, ['parameters' => ['customer-care' => 'customerCare']]);
-    
-    Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
-    Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-    
-    Route::middleware('auth')->post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
-
-    // Favorite Routes (Auth Required)
-    Route::middleware('auth')->group(function () {
-        Route::get('favorites', [\App\Http\Controllers\FavoriteController::class, 'index'])->name('favorites.index');
-        Route::post('favorites/{product}/toggle', [\App\Http\Controllers\FavoriteController::class, 'toggle'])->name('favorites.toggle');
-        Route::get('favorites/{product}/check', [\App\Http\Controllers\FavoriteController::class, 'check'])->name('favorites.check');
-        Route::delete('favorites/{product}', [\App\Http\Controllers\FavoriteController::class, 'destroy'])->name('favorites.destroy');
-    });
+    Route::get('/customer-care/my-tickets', [CustomerCareController::class, 'myTickets'])->name('customer-care.my-tickets');
+    Route::resource('contact', ContactController::class, ['only' => ['index', 'store']]);
+    Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store')->middleware('auth');
+    Route::middleware('auth')->resource('favorites', \App\Http\Controllers\FavoriteController::class, ['only' => ['index']]);
+    Route::middleware('auth')->post('/favorites/{product}/toggle', [\App\Http\Controllers\FavoriteController::class, 'toggle'])->name('favorites.toggle');
+    Route::middleware('auth')->get('/favorites/{product}/check', [\App\Http\Controllers\FavoriteController::class, 'check'])->name('favorites.check');
+    Route::middleware('auth')->delete('/favorites/{product}', [\App\Http\Controllers\FavoriteController::class, 'destroy'])->name('favorites.destroy');
 
     // Cart Routes
-    Route::resource('cart', CartController::class, ['only' => ['index']])->names('cart');
+    Route::resource('cart', CartController::class, ['only' => ['index']]);
     Route::post('cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::post('cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post('cart/remove', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('cart/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::get('cart/count', [CartController::class, 'getCount'])->name('cart.count');
 
-    // Checkout Routes (Auth Required)
+    // Checkout & Settings (Auth Required)
     Route::middleware('auth')->group(function () {
-        Route::resource('checkout', CheckoutController::class, ['only' => ['index', 'store']])->names('checkout');
+        Route::resource('checkout', CheckoutController::class, ['only' => ['index', 'store']]);
         Route::get('checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
         Route::get('checkout/{order}', [CheckoutController::class, 'show'])->name('checkout.show');
         Route::post('checkout/{order}/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
         Route::get('my-orders', [CheckoutController::class, 'myOrders'])->name('checkout.myOrders');
-        
-        // Bank Transfer Route
         Route::get('checkout/payment/bank-transfer/{order}', [CheckoutController::class, 'bankTransferInfo'])->name('checkout.bank-transfer');
 
-        // Settings Routes
-        Route::get('settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
+        Route::resource('settings', \App\Http\Controllers\SettingsController::class, ['only' => ['index']]);
         Route::post('settings/profile', [\App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.updateProfile');
         Route::post('settings/password', [\App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.updatePassword');
         Route::post('settings/delete', [\App\Http\Controllers\SettingsController::class, 'deleteAccount'])->name('settings.deleteAccount');
@@ -96,36 +81,26 @@ Route::group([], function () {
 // Admin Routes
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/email-test', function () {
-        return view('admin.email-test');
-    })->name('email-test');
     
     Route::resource('products', AdminProductController::class);
     Route::resource('categories', AdminCategoryController::class);
-    
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-    Route::post('users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
-    
     Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
     Route::resource('permissions', \App\Http\Controllers\Admin\PermissionController::class);
-    Route::get('permissions/search', [\App\Http\Controllers\Admin\PermissionController::class, 'search'])->name('permissions.search');
-    
     Route::resource('customer-care', AdminCustomerCareController::class, ['parameters' => ['customer-care' => 'customerCare']]);
+    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class, ['only' => ['index', 'show', 'destroy']]);
+    Route::resource('ratings', AdminRatingController::class);
+    Route::resource('contacts', AdminContactController::class);
+    Route::resource('email-logs', EmailLogController::class, ['only' => ['index', 'destroy']]);
+    
+    // Custom Actions
+    Route::post('users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::get('permissions/search', [\App\Http\Controllers\Admin\PermissionController::class, 'search'])->name('permissions.search');
     Route::post('customer-care/{customerCare}/status', [AdminCustomerCareController::class, 'updateStatus'])->name('customer-care.update-status');
     Route::post('customer-care/{customerCare}/respond', [AdminCustomerCareController::class, 'respond'])->name('customer-care.respond');
-    
-    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class, ['only' => ['index', 'show', 'destroy']]);
     Route::post('orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::post('orders/{order}/payment-status', [\App\Http\Controllers\Admin\OrderController::class, 'updatePaymentStatus'])->name('orders.updatePaymentStatus');
-    
-    Route::resource('ratings', AdminRatingController::class);
-    Route::post('ratings/{rating}/approve', [AdminRatingController::class, 'approve'])->name('ratings.approve');
-    Route::post('ratings/{rating}/reject', [AdminRatingController::class, 'reject'])->name('ratings.reject');
-    
-    Route::resource('contacts', AdminContactController::class);
     Route::post('contacts/{contact}/mark-responded', [AdminContactController::class, 'markResponded'])->name('contacts.mark-responded');
-    
-    Route::resource('email-logs', EmailLogController::class, ['only' => ['index', 'destroy']]);
     Route::post('email-logs/delete-failed', [EmailLogController::class, 'deleteFailed'])->name('email-logs.delete-failed');
     Route::post('email-logs/clear-old', [EmailLogController::class, 'clearOldLogs'])->name('email-logs.clear-old');
 });
@@ -135,7 +110,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
 Auth::routes(['verify' => false, 'reset' => false, 'confirm' => false, 'email' => false]);
 
-// GET /logout redirect to home to prevent direct link access
+
 Route::get('/logout', function () {
     return redirect('/');
 });

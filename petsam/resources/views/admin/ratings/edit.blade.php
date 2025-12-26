@@ -78,9 +78,8 @@
                     <div class="mb-4">
                         <label for="status" class="form-label fw-bold">Trạng Thái <span class="text-danger">*</span></label>
                         <select name="status" id="status" class="form-select" required>
-                            <option value="pending" {{ $rating->status == 'pending' ? 'selected' : '' }}>Chờ Duyệt</option>
-                            <option value="approved" {{ $rating->status == 'approved' ? 'selected' : '' }}>Đã Duyệt</option>
-                            <option value="rejected" {{ $rating->status == 'rejected' ? 'selected' : '' }}>Từ Chối</option>
+                            <option value="approved" {{ $rating->status == 'approved' ? 'selected' : '' }}>Đã Hiển Thị</option>
+                            <option value="rejected" {{ $rating->status == 'rejected' ? 'selected' : '' }}>Ẩn</option>
                         </select>
                     </div>
 

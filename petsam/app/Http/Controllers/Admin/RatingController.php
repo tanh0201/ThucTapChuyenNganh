@@ -115,7 +115,7 @@ class RatingController extends Controller
         $validated = $request->validate([
             'rating' => 'required|integer|between:1,5',
             'comment' => 'nullable|string|max:5000',
-            'status' => 'required|in:pending,approved,rejected',
+            'status' => 'required|in:approved,rejected',
         ]);
 
         $rating->update($validated);

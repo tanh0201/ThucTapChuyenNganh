@@ -94,9 +94,8 @@
                 <label class="form-label fw-bold small">Trạng thái</label>
                 <select name="status" class="form-select">
                     <option value="">Tất Cả</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Chờ Duyệt</option>
-                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Đã Duyệt</option>
-                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Từ Chối</option>
+                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Đã Hiển Thị</option>
+                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ẩn</option>
                 </select>
             </div>
             <div class="col-md-2">

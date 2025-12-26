@@ -16,7 +16,7 @@ class RatingController extends Controller
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
             'rating' => 'required|integer|between:1,5',
-            'comment' => 'required|string|min:10',
+            'comment' => 'nullable|string',
         ]);
 
         // Check if user already rated this product
@@ -34,9 +34,9 @@ class RatingController extends Controller
             'product_id' => $request->product_id,
             'rating' => $validated['rating'],
             'comment' => $validated['comment'],
-            'status' => 'pending', // Need admin approval
+            'status' => 'approved', // Display immediately without admin approval
         ]);
 
-        return back()->with('success', 'Cảm ơn bạn đã đánh giá! Admin sẽ kiểm duyệt trong thời gian sớm.');
+        return back()->with('success', 'Cảm ơn bạn đã đánh giá! Đánh giá của bạn đã được hiển thị.');
     }
 }
