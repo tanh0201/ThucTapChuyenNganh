@@ -7,6 +7,7 @@ use App\Mail\OrderStatusUpdatedMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -108,7 +109,7 @@ class OrderController extends Controller
         try {
             Mail::to($order->user->email)->send(new OrderStatusUpdatedMail($order));
         } catch (\Exception $e) {
-            \Log::error('Failed to send order status email: ' . $e->getMessage());
+            Log::error('Failed to send order status email: ' . $e->getMessage());
         }
 
         return back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
