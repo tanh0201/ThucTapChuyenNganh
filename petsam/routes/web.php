@@ -83,6 +83,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
     
     Route::resource('products', AdminProductController::class);
+    Route::post('products/{product}/toggle-status', [AdminProductController::class, 'toggleStatus'])->name('products.toggle-status');
     Route::resource('categories', AdminCategoryController::class);
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
     Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
@@ -101,6 +102,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::post('orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::post('orders/{order}/payment-status', [\App\Http\Controllers\Admin\OrderController::class, 'updatePaymentStatus'])->name('orders.updatePaymentStatus');
     Route::post('contacts/{contact}/mark-responded', [AdminContactController::class, 'markResponded'])->name('contacts.mark-responded');
+    Route::post('contacts/{contact}/respond', [AdminContactController::class, 'respond'])->name('contacts.respond');
+    Route::post('email-logs/quick-reply', [EmailLogController::class, 'quickReply'])->name('email-logs.quick-reply');
     Route::post('email-logs/delete-failed', [EmailLogController::class, 'deleteFailed'])->name('email-logs.delete-failed');
     Route::post('email-logs/clear-old', [EmailLogController::class, 'clearOldLogs'])->name('email-logs.clear-old');
 });

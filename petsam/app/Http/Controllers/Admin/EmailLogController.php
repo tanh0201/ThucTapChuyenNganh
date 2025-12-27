@@ -83,4 +83,37 @@ class EmailLogController extends Controller
 
         return back()->with('success', 'Xóa email log cũ thành công');
     }
+
+    /**
+     * Quick reply to email
+     */
+    public function quickReply(Request $request)
+    {
+        $request->validate([
+            'to_email' => 'required|email',
+            'subject' => 'required|string',
+            'message' => 'required|string|min:10',
+        ]);
+
+        try {
+            // Send email
+            \Illuminate\Support\Facades\Mail::raw($request->message, function ($mail) use ($request) {
+                $mail->to($request->to_email)
+                     ->subject($request->subject);
+            });
+
+            // Log email
+            EmailLog::create([
+                'to_email' => $request->to_email,
+                'subject' => $request->subject,
+                'mailable_class' => 'QuickReplyMail',
+                'body' => $request->message,
+                'status' => 'sent',
+            ]);
+
+            return back()->with('success', 'Phản hồi được gửi thành công');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Lỗi khi gửi phản hồi: ' . $e->getMessage());
+        }
+    }
 }

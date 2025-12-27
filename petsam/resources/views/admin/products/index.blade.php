@@ -101,6 +101,7 @@
               <th style="width: 12%; padding: 15px 12px; font-weight: 600; color: white; border: none;">Danh Mục</th>
               <th style="width: 13%; padding: 15px 12px; font-weight: 600; color: white; border: none; text-align: right;">Giá (VNĐ)</th>
               <th style="width: 10%; padding: 15px 12px; font-weight: 600; color: white; border: none; text-align: center;">Tồn Kho</th>
+              <th style="width: 10%; padding: 15px 12px; font-weight: 600; color: white; border: none;">Cảnh Báo</th>
               <th style="width: 12%; padding: 15px 12px; font-weight: 600; color: white; border: none;">Trạng Thái</th>
               <th style="width: 18%; padding: 15px 12px; font-weight: 600; color: white; border: none; text-align: center;">Thao Tác</th>
             </tr>
@@ -140,17 +141,40 @@
                   </span>
                 </td>
                 <td style="padding: 12px 12px; vertical-align: middle; color: #2c3e50; border: none;">
+                  @if ($product->stock <= 0)
+                    <span class="badge" style="padding: 6px 10px; font-size: 12px; font-weight: 600; background-color: #e74c3c; color: white;">
+                      <i class="fa fa-exclamation-circle me-1"></i>Hết Hàng
+                    </span>
+                  @elseif ($product->stock <= ($product->low_stock_threshold ?? 10))
+                    <span class="badge" style="padding: 6px 10px; font-size: 12px; font-weight: 600; background-color: #f6c23e; color: white;">
+                      <i class="fa fa-exclamation-triangle me-1"></i>Sắp Hết
+                    </span>
+                  @else
+                    <span class="badge" style="padding: 6px 10px; font-size: 12px; font-weight: 600; background-color: #1cc88a; color: white;">
+                      <i class="fa fa-check-circle me-1"></i>Còn Hàng
+                    </span>
+                  @endif
+                </td>
+                <td style="padding: 12px 12px; vertical-align: middle; color: #2c3e50; border: none;">
                   <span class="badge" style="padding: 6px 10px; font-size: 12px; font-weight: 600; background-color: {{ $product->status === 'active' ? '#1cc88a' : '#e74c3c' }}; color: white;">
-                    {{ $product->status === 'active' ? 'Hoạt Động' : 'Không Hoạt Động' }}
+                    {{ $product->status === 'active' ? 'Hiển Thị' : 'Ẩn' }}
                   </span>
                 </td>
                 <td style="padding: 12px 12px; vertical-align: middle; color: #2c3e50; border: none; text-align: center;">
-                  <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-warning" title="Sửa" style="padding: 6px 10px; font-size: 12px; font-weight: 600; margin-right: 3px;">
-                    <i class="fa fa-edit"></i> Sửa
-                  </a>
-                  <button class="btn btn-sm btn-danger" onclick="deleteProduct({{ $product->id }}, '{{ $product->name }}')" title="Xóa" style="padding: 6px 10px; font-size: 12px; font-weight: 600;">
-                    <i class="fa fa-trash"></i> Xóa
-                  </button>
+                  <div class="btn-group btn-group-sm" role="group">
+                    <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-warning" title="Sửa" style="font-size: 12px; font-weight: 600; padding: 5px 8px;">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <form action="{{ route('admin.products.toggle-status', $product->id) }}" method="POST" style="display: inline;">
+                      @csrf
+                      <button type="submit" class="btn {{ $product->status === 'active' ? 'btn-danger' : 'btn-success' }}" title="{{ $product->status === 'active' ? 'Ẩn' : 'Hiển thị' }}" style="font-size: 12px; font-weight: 600; padding: 5px 8px;">
+                        <i class="fa {{ $product->status === 'active' ? 'fa-eye-slash' : 'fa-eye' }}"></i>
+                      </button>
+                    </form>
+                    <button class="btn btn-danger" onclick="deleteProduct({{ $product->id }}, '{{ $product->name }}')" title="Xóa" style="font-size: 12px; font-weight: 600; padding: 5px 8px;">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
                 </td>
               </tr>
             @endforeach

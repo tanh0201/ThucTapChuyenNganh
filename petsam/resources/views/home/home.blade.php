@@ -266,7 +266,7 @@
                         <div style="padding: 20px; color: white; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                             <h4 class="fw-bold mb-2 text-white">{{ $category->name }}</h4>
                             <p class="text-white-50 small mb-0">
-                                {{ $category->products_count ?? 0 }} sản phẩm
+                                {{ $category->products()->count() }} sản phẩm
                             </p>
                         </div>
                     </div>

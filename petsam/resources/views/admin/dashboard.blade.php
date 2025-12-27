@@ -302,7 +302,15 @@
                         </li>
                         <li class="mb-2">
                             <i class="fas fa-check-circle text-success me-2"></i>
-                            <strong>Gợi ý AI:</strong> Sản phẩm được đề xuất thông minh
+                            <strong>Quản lý đơn hàng:</strong> Xem & xử lý đơn hàng
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Hỗ trợ khách hàng:</strong> Quản lý yêu cầu hỗ trợ
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Báo cáo & Thống kê:</strong> Theo dõi hiệu suất
                         </li>
                     </ul>
                 </div>

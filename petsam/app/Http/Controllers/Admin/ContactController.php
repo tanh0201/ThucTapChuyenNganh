@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactResponseMail;
+use Illuminate\Support\Facades\Log;
+
 
 class ContactController extends Controller
 {
@@ -40,8 +44,13 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        // Mark as read
-        $contact->update(['status' => 'read']);
+        // Mark as read only if not already responded
+        if ($contact->status === 'new') {
+            $contact->update(['status' => 'read']);
+        }
+
+        // Refresh from database to ensure we have latest data
+        $contact = Contact::find($contact->id);
 
         return view('admin.contacts.show', compact('contact'));
     }
@@ -53,7 +62,37 @@ class ContactController extends Controller
     {
         $contact->update(['status' => 'responded']);
 
-        return back()->with('success', 'Đã đánh dấu là đã phản hồi!');
+        return redirect()->route('admin.contacts.show', $contact->id)->with('success', 'Đã đánh dấu là đã phản hồi!');
+    }
+
+    /**
+     * Send response to contact
+     */
+    public function respond(Request $request, Contact $contact)
+    {
+        $validated = $request->validate([
+            'response_message' => 'required|string|min:10',
+        ], [
+            'response_message.required' => 'Vui lòng nhập nội dung phản hồi',
+            'response_message.min' => 'Nội dung phản hồi phải ít nhất 10 ký tự',
+        ]);
+
+        // Update status and save response
+        $contact->update([
+            'status' => 'responded',
+            'response_message' => $validated['response_message'],
+            'responded_at' => now(),
+        ]);
+
+        // Try to send email response
+        try {
+            Mail::to($contact->email)->send(new ContactResponseMail($contact, $validated['response_message']));
+        } catch (\Exception $e) {
+            // Log the error but don't fail the response
+            Log::error('Failed to send contact response email: ' . $e->getMessage());
+        }
+
+        return redirect()->route('admin.contacts.show', $contact->id)->with('success', 'Phản hồi đã được ghi nhận và gửi thành công!');
     }
 
     /**

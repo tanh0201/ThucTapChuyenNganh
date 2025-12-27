@@ -2,6 +2,20 @@
 
 @section('content')
 <div class="container-fluid px-4">
+    <!-- Alert Messages -->
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ $message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+    @if ($message = Session::get('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -80,6 +94,23 @@
                             <p class="mb-0 text-break">{{ $contact->message }}</p>
                         </div>
                     </div>
+
+                    <!-- Response Message (if exists) -->
+                    @if ($contact->response_message)
+                        <div class="mb-4">
+                            <label class="small fw-bold text-muted text-uppercase mb-2 d-block">
+                                <i class="fas fa-reply text-success me-2"></i>Phản Hồi Của Chúng Tôi
+                            </label>
+                            <div class="bg-success bg-opacity-10 p-3 rounded border border-success border-opacity-25">
+                                <p class="mb-0 text-break">{{ $contact->response_message }}</p>
+                                @if ($contact->responded_at)
+                                    <small class="text-muted d-block mt-2">
+                                        <i class="fas fa-clock me-1"></i>Phản hồi lúc: {{ $contact->responded_at->format('d/m/Y H:i') }}
+                                    </small>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -96,10 +127,28 @@
                 <div class="card-body">
                     <!-- Mark as Responded Button -->
                     @if ($contact->status !== 'responded')
-                        <form action="{{ route('contacts.mark-responded', $contact->id) }}" method="POST" class="mb-2">
+                        <form action="{{ route('admin.contacts.mark-responded', $contact->id) }}" method="POST" class="mb-3" onsubmit="handleMarkResponded(event)">
                             @csrf
-                            <button type="submit" class="btn btn-success w-100">
+                            <button type="submit" class="btn btn-info w-100" id="markRespondedBtn">
                                 <i class="fas fa-check-circle me-2"></i>Đánh Dấu Đã Phản Hồi
+                            </button>
+                        </form>
+
+                        <!-- Quick Response Form -->
+                        <div class="alert alert-info mb-3" role="alert">
+                            <i class="fas fa-lightbulb me-2"></i>Gửi phản hồi nhanh cho khách hàng
+                        </div>
+                        <form action="{{ route('admin.contacts.respond', $contact->id) }}" method="POST" class="mb-3" onsubmit="handleFormSubmit(event)">
+                            @csrf
+                            <div class="mb-2">
+                                <label for="response_message" class="form-label small fw-bold">Nội Dung Phản Hồi</label>
+                                <textarea class="form-control @error('response_message') is-invalid @enderror" id="response_message" name="response_message" rows="4" placeholder="Nhập nội dung phản hồi cho khách hàng..." required></textarea>
+                                @error('response_message')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn btn-success w-100" id="submitBtn">
+                                <i class="fas fa-paper-plane me-2"></i>Gửi Phản Hồi
                             </button>
                         </form>
                     @else
@@ -109,7 +158,7 @@
                     @endif
 
                     <!-- Delete Button -->
-                    <form action="{{ route('contacts.destroy', $contact->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                    <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger w-100">
@@ -152,4 +201,22 @@
         </div>
     </div>
 </div>
+
+<script>
+function handleMarkResponded(event) {
+    event.preventDefault();
+    const form = event.target;
+    
+    // Simple form submit without AJAX
+    form.submit();
+}
+
+function handleFormSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    
+    // Simple form submit without AJAX
+    form.submit();
+}
+</script>
 @endsection

@@ -106,6 +106,32 @@ class CustomerCareController extends Controller
     }
 
     /**
+     * Update ticket (status and response) - PUT /admin/customer-care/{customerCare}
+     */
+    public function update(Request $request, CustomerCare $customerCare)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,in_progress,resolved',
+            'response' => 'nullable|string|min:10|max:5000',
+        ], [
+            'response.min' => 'Phản hồi phải ít nhất 10 ký tự',
+        ]);
+
+        $updateData = ['status' => $validated['status']];
+
+        // If response is provided, update it
+        if (!empty($validated['response'])) {
+            $updateData['response'] = $validated['response'];
+            $updateData['responded_by'] = Auth::id();
+            $updateData['responded_at'] = now();
+        }
+
+        $customerCare->update($updateData);
+
+        return redirect()->back()->with('success', 'Cập nhật thành công');
+    }
+
+    /**
      * Send response to customer - POST /admin/customer-care/{customerCare}/respond
      */
     public function respond(Request $request, CustomerCare $customerCare)

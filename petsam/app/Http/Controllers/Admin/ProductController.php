@@ -129,4 +129,16 @@ class ProductController extends Controller
         $product->delete();
         return redirect('/admin/products')->with('success', 'Sản phẩm đã được xóa');
     }
+
+    /**
+     * Toggle product status (hide/show when out of stock)
+     */
+    public function toggleStatus(Product $product)
+    {
+        $newStatus = $product->status === 'active' ? 'inactive' : 'active';
+        $product->update(['status' => $newStatus]);
+
+        $message = $newStatus === 'active' ? 'Sản phẩm đã được hiển thị' : 'Sản phẩm đã được ẩn';
+        return back()->with('success', $message);
+    }
 }

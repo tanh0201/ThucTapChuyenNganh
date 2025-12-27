@@ -13,10 +13,13 @@ class Contact extends Model
         'subject',
         'message',
         'status',
+        'response_message',
+        'responded_at',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'responded_at' => 'datetime',
     ];
 }

@@ -38,31 +38,31 @@
                 <div class="row mb-3 pb-3 border-bottom">
                     <div class="col-md-6">
                         <label class="form-label fw-bold small text-muted">Khách Hàng</label>
-                        @if ($ticket->user)
+                        @if ($customerCare->user)
                             <p class="mb-0">
-                                <strong class="text-dark">{{ $ticket->user->name }}</strong>
+                                <strong class="text-dark">{{ $customerCare->user->name }}</strong>
                                 <br>
-                                <small class="text-muted">{{ $ticket->user->email }}</small>
-                                @if ($ticket->user->phone)
+                                <small class="text-muted">{{ $customerCare->user->email }}</small>
+                                @if ($customerCare->user->phone)
                                     <br>
-                                    <small class="text-muted">{{ $ticket->user->phone }}</small>
+                                    <small class="text-muted">{{ $customerCare->user->phone }}</small>
                                 @endif
                             </p>
                         @else
                             <p class="mb-0">
-                                <strong class="text-dark">{{ $ticket->name }}</strong>
+                                <strong class="text-dark">{{ $customerCare->name }}</strong>
                                 <br>
-                                <small class="text-muted">{{ $ticket->email }}</small>
-                                @if ($ticket->phone)
+                                <small class="text-muted">{{ $customerCare->email }}</small>
+                                @if ($customerCare->phone)
                                     <br>
-                                    <small class="text-muted">{{ $ticket->phone }}</small>
+                                    <small class="text-muted">{{ $customerCare->phone }}</small>
                                 @endif
                             </p>
                         @endif
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold small text-muted">Chủ Đề</label>
-                        <p class="mb-0 text-dark">{{ $ticket->subject }}</p>
+                        <p class="mb-0 text-dark">{{ $customerCare->subject }}</p>
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold small text-muted">Trạng Thái</label>
                         <div>
-                            @switch($ticket->status)
+                            @switch($customerCare->status)
                                 @case('pending')
                                     <span class="badge bg-danger">
                                         <i class="fas fa-exclamation-circle me-1"></i> Chờ Xử Lý
@@ -92,7 +92,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold small text-muted">Ngày Yêu Cầu</label>
-                        <p class="mb-0 text-dark">{{ $ticket->created_at->format('d/m/Y H:i') }}</p>
+                        <p class="mb-0 text-dark">{{ $customerCare->created_at->format('d/m/Y H:i') }}</p>
                     </div>
                 </div>
 
@@ -100,7 +100,7 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold small text-muted">Nội Dung Yêu Cầu</label>
                     <div class="bg-light p-3 rounded text-dark" style="min-height: 120px;">
-                        {{ $ticket->message }}
+                        {{ $customerCare->message }}
                     </div>
                 </div>
             </div>
@@ -114,13 +114,13 @@
                 </h6>
             </div>
             <div class="card-body">
-                @if ($ticket->response)
+                @if ($customerCare->response)
                     <div class="bg-light p-3 rounded mb-3 border-left border-success" style="border-left: 4px solid;">
                         <small class="text-muted d-block mb-2">
-                            <i class="fas fa-user-tie me-1"></i> {{ $ticket->respondedBy->name ?? 'Admin' }} 
-                            - {{ $ticket->responded_at?->format('d/m/Y H:i') }}
+                            <i class="fas fa-user-tie me-1"></i> {{ $customerCare->respondedBy->name ?? 'Admin' }} 
+                            - {{ $customerCare->responded_at?->format('d/m/Y H:i') }}
                         </small>
-                        <p class="mb-0 text-dark">{{ $ticket->response }}</p>
+                        <p class="mb-0 text-dark">{{ $customerCare->response }}</p>
                     </div>
                     <hr>
                 @else
@@ -129,23 +129,23 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.customer-care.update', $ticket->id) }}" method="POST">
+                <form action="{{ route('admin.customer-care.update', $customerCare->id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
                     <div class="mb-3">
                         <label for="status" class="form-label fw-bold">Cập Nhật Trạng Thái</label>
                         <select name="status" id="status" class="form-select">
-                            <option value="pending" {{ $ticket->status == 'pending' ? 'selected' : '' }}>Chờ Xử Lý</option>
-                            <option value="in_progress" {{ $ticket->status == 'in_progress' ? 'selected' : '' }}>Đang Xử Lý</option>
-                            <option value="resolved" {{ $ticket->status == 'resolved' ? 'selected' : '' }}>Đã Giải Quyết</option>
+                            <option value="pending" {{ $customerCare->status == 'pending' ? 'selected' : '' }}>Chờ Xử Lý</option>
+                            <option value="in_progress" {{ $customerCare->status == 'in_progress' ? 'selected' : '' }}>Đang Xử Lý</option>
+                            <option value="resolved" {{ $customerCare->status == 'resolved' ? 'selected' : '' }}>Đã Giải Quyết</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="response" class="form-label fw-bold">Phản Hồi</label>
                         <textarea name="response" id="response" class="form-control" rows="6" 
-                                  placeholder="Nhập phản hồi cho khách hàng...">{{ $ticket->response }}</textarea>
+                                  placeholder="Nhập phản hồi cho khách hàng...">{{ $customerCare->response }}</textarea>
                     </div>
 
                     <div class="d-flex gap-2">
@@ -171,7 +171,7 @@
                 </h6>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.customer-care.update', $ticket->id) }}" method="POST" class="mb-2">
+                <form action="{{ route('admin.customer-care.update', $customerCare->id) }}" method="POST" class="mb-2">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="status" value="in_progress">
@@ -180,7 +180,7 @@
                     </button>
                 </form>
 
-                <form action="{{ route('admin.customer-care.update', $ticket->id) }}" method="POST" class="mb-2">
+                <form action="{{ route('admin.customer-care.update', $customerCare->id) }}" method="POST" class="mb-2">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="status" value="resolved">
@@ -189,7 +189,7 @@
                     </button>
                 </form>
 
-                <form action="{{ route('admin.customer-care.destroy', $ticket->id) }}" method="POST" 
+                <form action="{{ route('admin.customer-care.destroy', $customerCare->id) }}" method="POST" 
                       onsubmit="return confirm('Bạn chắc chắn muốn xóa?')">
                     @csrf
                     @method('DELETE')
@@ -211,30 +211,30 @@
                 <dl class="mb-0">
                     <dt class="fw-bold small text-muted">ID Ticket</dt>
                     <dd class="mb-3">
-                        <span class="badge bg-primary">{{ $ticket->id }}</span>
+                        <span class="badge bg-primary">{{ $customerCare->id }}</span>
                     </dd>
 
                     <dt class="fw-bold small text-muted">Ngày Tạo</dt>
-                    <dd class="mb-3">{{ $ticket->created_at->format('d/m/Y H:i') }}</dd>
+                    <dd class="mb-3">{{ $customerCare->created_at->format('d/m/Y H:i') }}</dd>
 
                     <dt class="fw-bold small text-muted">Lần Cập Nhật</dt>
-                    <dd class="mb-3">{{ $ticket->updated_at->format('d/m/Y H:i') }}</dd>
+                    <dd class="mb-3">{{ $customerCare->updated_at->format('d/m/Y H:i') }}</dd>
 
-                    @if ($ticket->responded_at)
+                    @if ($customerCare->responded_at)
                         <dt class="fw-bold small text-muted">Phản Hồi Vào</dt>
-                        <dd class="mb-3">{{ $ticket->responded_at->format('d/m/Y H:i') }}</dd>
+                        <dd class="mb-3">{{ $customerCare->responded_at->format('d/m/Y H:i') }}</dd>
                     @endif
 
-                    @if ($ticket->respondedBy)
+                    @if ($customerCare->respondedBy)
                         <dt class="fw-bold small text-muted">Người Xử Lý</dt>
                         <dd class="mb-3">
-                            <span class="badge bg-info">{{ $ticket->respondedBy->name }}</span>
+                            <span class="badge bg-info">{{ $customerCare->respondedBy->name }}</span>
                         </dd>
                     @endif
 
                     <dt class="fw-bold small text-muted">Số Ký Tự</dt>
                     <dd class="mb-0">
-                        <span class="text-muted">{{ strlen($ticket->message) }} ký tự</span>
+                        <span class="text-muted">{{ strlen($customerCare->message) }} ký tự</span>
                     </dd>
                 </dl>
             </div>
