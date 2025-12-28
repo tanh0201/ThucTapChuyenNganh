@@ -5,11 +5,11 @@
 
 @section('content')
 
-<!-- ==================== HERO BANNER ==================== -->
+
 <section class="hero-banner" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 100px 0; color: white; position: relative; overflow: hidden; min-height: 500px;">
     <div class="container">
         <div class="row align-items-center justify-content-between">
-            <!-- Left Content -->
+            
             <div class="col-lg-5 col-md-6 mb-4 mb-lg-0 pe-lg-5">
                 <h1 class="display-3 fw-bold mb-4" style="line-height: 1.2;">
                     Phụ kiện thú cưng chất lượng cao
@@ -118,7 +118,6 @@
     </div>
 </section>
 
-<!-- ==================== CUSTOMER CARE CTA ==================== -->
 <section class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
     <div class="container">
         <div class="row align-items-center">
@@ -324,25 +323,7 @@
     </div>
 </section>
 
-<!-- ==================== NEWSLETTER ==================== -->
-<section class="py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h2 class="fw-bold display-5 mb-3">Nhận thông tin khuyến mãi</h2>
-                <p class="text-muted fs-5">Đăng ký email để nhận những ưu đãi độc quyền và tin tức mới nhất từ PetSam</p>
-            </div>
-            <div class="col-lg-6">
-                <form class="d-flex gap-2" id="newsletter-form">
-                    <input type="email" class="form-control form-control-lg" placeholder="Nhập email của bạn" required>
-                    <button type="submit" class="btn btn-primary btn-lg px-5">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <!-- ==================== CSS & JS ==================== -->
 <style>

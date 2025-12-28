@@ -17,6 +17,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Admin\SiteInfoController;
 
 
 Route::get('/', function () {
@@ -62,6 +63,7 @@ Route::group([], function () {
     Route::post('cart/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::get('cart/count', [CartController::class, 'getCount'])->name('cart.count');
 
+    
     // Checkout & Settings (Auth Required)
     Route::middleware('auth')->group(function () {
         Route::resource('checkout', CheckoutController::class, ['only' => ['index', 'store']]);
@@ -81,6 +83,10 @@ Route::group([], function () {
 // Admin Routes
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+    
+    Route::get('site-info', [SiteInfoController::class, 'index'])->name('site-info.index');
+    Route::get('site-info/edit', [SiteInfoController::class, 'edit'])->name('site-info.edit');
+    Route::put('site-info', [SiteInfoController::class, 'update'])->name('site-info.update');
     
     Route::resource('products', AdminProductController::class);
     Route::post('products/{product}/toggle-status', [AdminProductController::class, 'toggleStatus'])->name('products.toggle-status');
@@ -107,9 +113,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::post('email-logs/delete-failed', [EmailLogController::class, 'deleteFailed'])->name('email-logs.delete-failed');
     Route::post('email-logs/clear-old', [EmailLogController::class, 'clearOldLogs'])->name('email-logs.clear-old');
 });
-
-
-
 
 Auth::routes(['verify' => false, 'reset' => false, 'confirm' => false, 'email' => false]);
 

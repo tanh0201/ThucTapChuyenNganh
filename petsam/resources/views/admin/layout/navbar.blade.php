@@ -78,6 +78,8 @@
             <span class="ms-2">Hệ Thống</span>
           </a>
           <ul class="dropdown-menu" aria-labelledby="systemDropdown">
+            <li><a class="dropdown-item" href="{{ route('admin.site-info.index') }}"><i class="fas fa-globe me-2"></i>Thông Tin Trang Web</a></li>
+            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{ route('admin.users.index') }}"><i class="fas fa-users me-2"></i>Người Dùng</a></li>
             <li><a class="dropdown-item" href="{{ route('admin.users.create') }}"><i class="fas fa-user-plus me-2"></i>Thêm Người Dùng</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -231,7 +233,7 @@
     const dropdownRoutes = {
       'productsDropdown': ['admin.products.', 'admin.categories.'],
       'managementDropdown': ['admin.orders.', 'admin.ratings.', 'admin.customer-care.', 'admin.contacts.', 'admin.email-logs.'],
-      'systemDropdown': ['admin.users.', 'admin.roles.', 'admin.permissions.']
+      'systemDropdown': ['admin.users.', 'admin.roles.', 'admin.permissions.', 'admin.site-info.']
     };
 
     for (let [dropdownId, routes] of Object.entries(dropdownRoutes)) {

@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use App\Listeners\LogEmailListener;
+use App\Http\View\Composers\FooterComposer;
 use Illuminate\Mail\Events\MessageSending;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,5 +31,8 @@ class AppServiceProvider extends ServiceProvider
             MessageSending::class,
             LogEmailListener::class
         );
+
+        // Register footer view composer
+        View::composer('layout.footer', FooterComposer::class);
     }
 }
